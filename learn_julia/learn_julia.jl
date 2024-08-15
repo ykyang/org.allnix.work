@@ -1,32 +1,73 @@
 # Learn basic Julia stuff
+"""
+Learn Julia
+"""
 module LearnJulia
 
 using Test
 import Serialization
 
-## Use Julia generated document, @doc Node, to doc the struct.
+## Two different ways to document a struct.
+#
+# 1. Use `replace()` to grep Julia generated document as shown below.
+#
+# """
+#     Node
+#
+# $(replace(string(@doc Node), "No documentation found.\n\n"=>""))
+# """
+#
+# 2. Comment out the following document, run `@doc Node`, copy the Julia 
+#    generated document, and paste below.
 """
     Node
 
-$(replace(string(@doc Node), "No documentation found.\n\n"=>""))
+Learn mutable structure.
+
+# Summary
+
+`mutable struct LearnJulia.Node`
+
+# Fields
+`id :: Int64`
 """
 mutable struct Node
     id::Int
 
-    Node(id) = (me = new(); me.id = id; me) # Inner constructor
+    ## Inner constructor
+    # enforcing invariant, construction of self-referential objects
+    #
+    # Compiler creates this if not defined.
+    Node(id) = (me = new(); me.id = id; me)
+    # could be written this way
+    # function Node(id)
+    #     me = new()
+    #     me.id = id
+    #     return me
+    # end
 end
 
-Node() = Node(0) # Outer constructor
+## Outer constructor
+# Outer constructor can only ever create a new instance by calling another
+# constructor method.
+Node() = Node(0)
 
+## Operator
 # https://discourse.julialang.org/t/proper-way-to-overload-operators/19872
-
 # One can use function name or symbol to implement operator overloading
+# Base.:(<)(x::Node, y::Node) = x.id < y.id 
+# Base.isless(x::Node, y::Node) = x.id < y.id
 
-#Base.:(<)(x::Node, y::Node) = x.id < y.id # Base.isless(x::Node, y::Node) = x.id < y.id
+"""
+    Base.:(==)(x::Node,y::Node) 
+
+`Node` are equal if their `id` are the same.
+""" 
 function Base.:(==)(x::Node,y::Node) 
     return x.id == y.id
 end
-# used by sort()
+
+## used by sort()
 #Base.isless(x::Node, y::Node) = error("Unsupported operation")
 Base.isless(x::Node, y::Node) = x.id < y.id
 
@@ -38,6 +79,20 @@ function Base.hash(n::Node, h::UInt)
     return hash(n.id, h)
 end
 
+"""
+    OrderedPair
+
+Learn immutable structure.
+
+# Summary
+
+`struct LearnJulia.OrderedPair`
+
+# Fields
+
+`x :: Real`
+`y :: Real`
+"""
 struct OrderedPair
     x::Real
     y::Real

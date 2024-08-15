@@ -1,3 +1,6 @@
-authors = ["Yi-Kun Yang <ykyang@gmail.com>"]
 name = "Learn Julia"
+authors = ["Yi-Kun Yang <ykyang@gmail.com>"]
 version = "0.0.1"
+
+[deps]
+TerminalPager = "0c614874-6106-40ed-a7c2-2f1cd0bff883"
