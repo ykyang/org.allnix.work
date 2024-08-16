@@ -20,7 +20,7 @@ import Serialization
 # 2. Comment out the following document, run `@doc Node`, copy the Julia 
 #    generated document, and paste below.
 """
-    Node
+Node
 
 Learn mutable structure.
 
@@ -30,6 +30,8 @@ Learn mutable structure.
 
 # Fields
 `id :: Int64`
+
+`#constructor`
 """
 mutable struct Node
     id::Int
@@ -92,6 +94,8 @@ Learn immutable structure.
 
 `x :: Real`
 `y :: Real`
+
+`#constructor`
 """
 struct OrderedPair
     x::Real
@@ -106,45 +110,45 @@ function Base.:(==)(x::OrderedPair,y::OrderedPair)
     return x.x == y.x && x.y == y.y
 end
 
-function learn_Node()
-    @test Node(7) == Node(7)
-    @test Node(7) != Node(13)
+# function learn_Node()
+#     @test Node(7) == Node(7)
+#     @test Node(7) != Node(13)
     
-    @test Node(7) < Node(13)
-    @test Node(7) <= Node(13)
-    @test Node(13) <= Node(13)
+#     @test Node(7) < Node(13)
+#     @test Node(7) <= Node(13)
+#     @test Node(13) <= Node(13)
 
-    @test Node(13) > Node(7)
-    @test Node(13) >= Node(7)
-    @test Node(13) >= Node(13)
-end
+#     @test Node(13) > Node(7)
+#     @test Node(13) >= Node(7)
+#     @test Node(13) >= Node(13)
+# end
 
 
-function learn_arguments()
-    function varg(x, args...; nargs...)
-        # @show typeof(args)
-        # @show args
-        # @show typeof(nargs)
-        # @show nargs
-        for arg in args
-            @show arg
-        end
-        for narg in nargs
-            @show narg
-        end
-    end
-    function varg2(x, args...; nargs...)
-        varg(x, args...; nargs...)
-    end
+# function learn_arguments()
+#     function varg(x, args...; nargs...)
+#         # @show typeof(args)
+#         # @show args
+#         # @show typeof(nargs)
+#         # @show nargs
+#         for arg in args
+#             @show arg
+#         end
+#         for narg in nargs
+#             @show narg
+#         end
+#     end
+#     function varg2(x, args...; nargs...)
+#         varg(x, args...; nargs...)
+#     end
 
-    varg2(1, 2, 3;x=1, y=2)
-    """
-    arg = 2
-    arg = 3
-    narg = :x => 1
-    narg = :y => 2
-    """
-end
+#     varg2(1, 2, 3;x=1, y=2)
+#     """
+#     arg = 2
+#     arg = 3
+#     narg = :x => 1
+#     narg = :y => 2
+#     """
+# end
 
 function learn_exception()
     ## Show stack trace after catch
@@ -533,7 +537,141 @@ end
 #learn_exception()
 #learn_123()
 
-export Node, OrderedPair
-end # module
+"""
+Compare `Node`.
 
-nothing
+`#struct`
+"""
+function learn_1()
+    @test Node(7) == Node(7)
+    @test Node(7) != Node(13)
+    
+    @test Node(7) < Node(13)
+    @test Node(7) <= Node(13)
+    @test Node(13) <= Node(13)
+
+    @test Node(13) > Node(7)
+    @test Node(13) >= Node(7)
+    @test Node(13) >= Node(13) 
+
+    nothing
+end
+
+"""
+Compare `OrderedPair`
+
+`#struct`
+"""
+function learn_2()
+    # Test ==
+    @test OrderedPair(1,2) == OrderedPair(1,2)
+    @test OrderedPair(1,2) != OrderedPair(2,3)
+    # Test error
+    @test_throws ErrorException OrderedPair(2,1)
+    
+    nothing
+end
+
+"""
+Run code with `eval` and `String`
+
+`#eval #parse`
+"""
+function learn_3()
+    eval(Meta.parse("LearnJulia.learn_2()"))
+    @eval Meta.parse("LearnJulia.learn_2()")
+
+    nothing
+end
+
+"""
+Function argument
+
+`#argument #args #nargs`
+"""
+function learn_4()
+    fn = function(a, args...; b, nargs...)
+        @test a == 1
+        @test length(args) == 2
+        @test args == (2,3)
+        @test b == 4
+        @test length(nargs) == 2
+        @test nargs == Dict(:c=>5,:d=>6)
+    end
+    fn(1, 2, 3; b=4, c=5, d=6)
+
+    nothing
+end
+
+"""
+Exception
+
+`#catch #else #finally #throw #try`
+"""
+function learn_5()
+    ## Simple try-catch
+    try
+        error("=======")
+    catch e
+        @test isa(e, ErrorException)
+        @test e.msg == "======="
+
+        ## Print backtrace
+        # Base.show_backtrace(stdout, Base.catch_backtrace())
+
+        ## Current exceptions
+        # for (exc, bt) in current_exceptions()
+        #     showerror(stdout, exc, bt)
+        #     println(stdout)                
+        # end 
+    end
+
+    ## Catch specific exception
+    @test_throws ErrorException try
+        error()
+    catch e
+        if isa(e, ArgumentError)
+        else
+            throw(e) # re-throw
+        end                
+    end
+    
+    ## try-else
+    x = nothing
+    try
+        # no exception
+    catch 
+        x = 17
+    else
+        x = 19 # execute
+    end
+    @test x == 19
+        
+    ## try-finally
+    x = nothing
+    try
+        x = 13
+    catch 
+        x = 17
+    finally
+        x = 19 # execute
+    end
+    @test x == 19
+    
+    ## try-catch-finally
+    x = nothing
+    try
+        error()
+    catch 
+        x = 17
+    finally
+        x = 19 # execute
+    end
+    @test x == 19
+
+    nothing
+end
+
+export Node, OrderedPair
+
+end # module LearnJulia
