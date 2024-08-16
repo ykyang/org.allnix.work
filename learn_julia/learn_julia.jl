@@ -150,58 +150,58 @@ end
 #     """
 # end
 
-function learn_exception()
-    ## Show stack trace after catch
-    # https://docs.julialang.org/en/v1/manual/stacktraces/#Exception-stacks-and-[current_exceptions](@ref)
-    try
-        error("(A) The root cause")
-    catch
-        try
-            error("(B) An exception in catch")
-        catch
-            # (exception,backtrace)
-            for (exc, bt) in current_exceptions()
-                showerror(stdout, exc, bt)
-                println(stdout)                
-            end
-        end
-    end
-end
+# function learn_exception()
+#     ## Show stack trace after catch
+#     # https://docs.julialang.org/en/v1/manual/stacktraces/#Exception-stacks-and-[current_exceptions](@ref)
+#     try
+#         error("(A) The root cause")
+#     catch
+#         try
+#             error("(B) An exception in catch")
+#         catch
+#             # (exception,backtrace)
+#             for (exc, bt) in current_exceptions()
+#                 showerror(stdout, exc, bt)
+#                 println(stdout)                
+#             end
+#         end
+#     end
+# end
 
 
 #mj = MyJulia
 
 #mj.learn_Node()
 
-function learn_resize!()
-    x = [1,2,3]
-    y = x
-    @test y === x
-    @test 3 == length(y)
+# function learn_resize!()
+#     x = [1,2,3]
+#     y = x
+#     @test y === x
+#     @test 3 == length(y)
 
-    resize!(x, 1)
-    @test y === x
-    @test 1 == length(y)
-    @test 1 == y[1]
+#     resize!(x, 1)
+#     @test y === x
+#     @test 1 == length(y)
+#     @test 1 == y[1]
 
-    resize!(x, 0)
-    @test y === x
-    @test isempty(y)
+#     resize!(x, 0)
+#     @test y === x
+#     @test isempty(y)
     
-end
+# end
 
-function learn_searchsortedfirst()
-    v = Float64[1, 2, 3, 4, 5]
+# function learn_searchsortedfirst()
+#     v = Float64[1, 2, 3, 4, 5]
     
-    i = searchsortedfirst(v, 1)
-    @test 1 == i
+#     i = searchsortedfirst(v, 1)
+#     @test 1 == i
 
-    i = searchsortedfirst(v, 1.5)
-    @test 2 == i
+#     i = searchsortedfirst(v, 1.5)
+#     @test 2 == i
 
-    i = searchsortedfirst(v, 2)
-    @test 2 == i
-end
+#     i = searchsortedfirst(v, 2)
+#     @test 2 == i
+# end
 
 """
 
@@ -542,7 +542,7 @@ Compare `Node`.
 
 `#struct`
 """
-function learn_1()
+function learn_julia_1()
     @test Node(7) == Node(7)
     @test Node(7) != Node(13)
     
@@ -562,7 +562,7 @@ Compare `OrderedPair`
 
 `#struct`
 """
-function learn_2()
+function learn_julia_2()
     # Test ==
     @test OrderedPair(1,2) == OrderedPair(1,2)
     @test OrderedPair(1,2) != OrderedPair(2,3)
@@ -577,9 +577,9 @@ Run code with `eval` and `String`
 
 `#eval #parse`
 """
-function learn_3()
-    eval(Meta.parse("LearnJulia.learn_2()"))
-    @eval Meta.parse("LearnJulia.learn_2()")
+function learn_julia_3()
+    eval(Meta.parse("LearnJulia.learn_julia_2()"))
+    @eval Meta.parse("LearnJulia.learn_julia_2()")
 
     nothing
 end
@@ -589,7 +589,7 @@ Function argument
 
 `#argument #args #nargs`
 """
-function learn_4()
+function learn_julia_4()
     fn = function(a, args...; b, nargs...)
         @test a == 1
         @test length(args) == 2
@@ -608,7 +608,7 @@ Exception
 
 `#catch #else #finally #throw #try`
 """
-function learn_5()
+function learn_julia_5()
     ## Simple try-catch
     try
         error("=======")
@@ -668,6 +668,80 @@ function learn_5()
         x = 19 # execute
     end
     @test x == 19
+
+    nothing
+end
+
+"""
+Resize array
+
+`#resize`
+"""
+function learn_julia_6()
+    ## Float64
+    v = Float64[1,2,3,4,5]
+    @test 5 == length(v)
+    ## New element is random
+    resize!(v, 6) 
+    @test 6 == length(v)
+    @test [1,2,3,4,5] == v[1:5]
+    ## Retain values
+    resize!(v,4)
+    @test 4 == length(v)
+    @test [1,2,3,4] == v
+
+    nothing
+end
+
+"""
+Search sorted
+
+Search a sorted array, and return range or index.
+
+`#searchsorted #searchsortedfirst #searchsortedlast`
+"""
+function learn_julia_7()
+    ## searchsorted
+    v = Float64[1,2,4,5,5,7]
+
+    @test 3:3 == searchsorted(v, 4) # single match
+    @test 4:5 == searchsorted(v, 5) # multiple match
+    @test 3:2 == searchsorted(v, 3) # no match
+    @test 3 == (3:2).start
+    @test 7:6 == searchsorted(v, 9) # no match
+
+    ## searchsortedfirst
+    v = Float64[1,2,4,5,5,7]
+
+    @test 3 == searchsortedfirst(v, 4) # index
+    @test 4 == searchsortedfirst(v, 5) # index
+    @test 3 == searchsortedfirst(v, 3) # index
+    @test 7 == searchsortedfirst(v, 9) # index
+    @test 1 == searchsortedfirst(v, 0) # index
+
+    ## searchsortedlast
+    v = Float64[1,2,4,5,5,7]
+
+    @test 3 == searchsortedlast(v, 4) # index
+    @test 5 == searchsortedlast(v, 5) # index
+    @test 2 == searchsortedlast(v, 3) # index
+    @test 6 == searchsortedlast(v, 9) # index
+    @test 0 == searchsortedlast(v, 0) # index
+end
+
+"""
+    run_all()
+ 
+Run all `learn_julia` functions.
+Run with `include("learn_julia.jl");LearnJulia.run_all();`
+"""
+function run_all()
+    n = 7
+    @testset "All" begin
+        for i in 1:n
+            eval(Meta.parse("LearnJulia.learn_julia_$(i)()"))
+        end
+    end
 
     nothing
 end
