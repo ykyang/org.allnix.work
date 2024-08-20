@@ -703,16 +703,14 @@ Search a sorted array, and return range or index.
 function learn_julia_7()
     ## searchsorted
     v = Float64[1,2,4,5,5,7]
-
     @test 3:3 == searchsorted(v, 4) # single match
     @test 4:5 == searchsorted(v, 5) # multiple match
     @test 3:2 == searchsorted(v, 3) # no match
-    @test 3 == (3:2).start
+    @test 3 == (3:2).start          # access range
     @test 7:6 == searchsorted(v, 9) # no match
 
     ## searchsortedfirst
     v = Float64[1,2,4,5,5,7]
-
     @test 3 == searchsortedfirst(v, 4) # index
     @test 4 == searchsortedfirst(v, 5) # index
     @test 3 == searchsortedfirst(v, 3) # index
@@ -721,12 +719,102 @@ function learn_julia_7()
 
     ## searchsortedlast
     v = Float64[1,2,4,5,5,7]
-
     @test 3 == searchsortedlast(v, 4) # index
     @test 5 == searchsortedlast(v, 5) # index
     @test 2 == searchsortedlast(v, 3) # index
     @test 6 == searchsortedlast(v, 9) # index
     @test 0 == searchsortedlast(v, 0) # index
+end
+
+"""
+CartesianIndex, CartesianIndices
+
+
+`#CartesianIndex, #CartesianIndices`
+"""
+function learn_julia_8()
+    # shortcut
+    CI = CartesianIndex
+    CIS = CartesianIndices
+
+    ## CartesianIndex
+    @test (1,2) == CartesianIndex(1,2).I 
+    @test [(1,2), (2,3)] == getproperty.(CartesianIndex{2}[CI(1,2), CI(2,3)], :I)
+    
+    v = [2,4,6,8]
+    @test 4 == v[CI(2)]
+    @test 6 == v[CI(3)]
+
+    v = [2  4  6;
+         8 10 12;]
+    @test 4  == v[CI(1,2)]
+    @test 12 == v[CI(2,3)]
+
+    ## CartesianIndices
+    v = [2,4,6,8]
+    @test v[2:4] == v[CartesianIndices( (2:4,) )]
+    @test [CI(2),CI(3),CI(4)] == CartesianIndices( (2:4,) )
+end
+
+"""
+Find
+
+`#findall #findfirst #findmax`
+"""
+function learn_julia_9()
+    # shortcut
+    CI = CartesianIndex 
+    let # findall, Array
+        v = Int64[1,3,4]
+        #@test isa(findall(isodd,v), Vector{Int64})
+        @test [1,2] == findall(isodd, v)
+    
+        v = Int64[1 2 0; 
+                  3 4 0;]
+        #@test isa(findall(isodd, v), Vector{CartesianIndex{2}})
+        @test [CI(1,1), CI(2,1)] == findall(isodd, v)
+        # Notice the sequence is column first
+        @test [CI(1,1),CI(2,1),CI(1,2),CI(2,2)] == findall(!iszero, v)
+    end
+    let # findall, Dict
+        ## Compare values, return keys
+        v = Dict(:A=>10, :B=>-1, :C=>0)
+        @test [:A,:C] == findall(x->x >= 0, v)
+    end
+    let # findfirst
+        v = [1,4,2,2]
+        @test 2 == findfirst(iseven, v)
+    end
+    let # findmax, findmax!
+        v = [2,3,4]
+        @test (16,3) == findmax(x->x^2, v) # (value,index)
+
+        rval = [1] # value does not matter
+        rind = [1] # value does not matter
+        @test ([4],[3]) == findmax!(rval,rind,v)
+        @test [4] == rval
+        @test [3] == rind
+    end
+end
+
+"""
+Filter
+
+`#filter`
+"""
+function learn_julia_10()
+    let # filter, Array
+        v = 1:10
+        @test 1:2:10 == filter(isodd, v) # [1, 3, 5, ...]
+
+        fn = filter(iseven) # Create a filter with predicate
+        @test 2:2:10 == fn(v)
+    end
+    let # filter, Dict
+        v = Dict(1=>"a", 2=>"b")
+        @test Dict(1=>"a") == filter(x->isodd(x.first), v) 
+    end
+
 end
 
 """
@@ -736,7 +824,7 @@ Run all `learn_julia` functions.
 Run with `include("learn_julia.jl");LearnJulia.run_all();`
 """
 function run_all()
-    n = 7
+    n = 10
     @testset "All" begin
         for i in 1:n
             eval(Meta.parse("LearnJulia.learn_julia_$(i)()"))
