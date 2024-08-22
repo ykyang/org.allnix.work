@@ -1,6 +1,8 @@
 # Learn basic Julia stuff
 """
 Learn Julia
+
+Learn Juia syntax and functions.  Use `run_all()` to run functions.
 """
 module LearnJulia
 
@@ -203,97 +205,97 @@ end
 #     @test 2 == i
 # end
 
-"""
+# """
 
-Learn for-loop syntax
-```
-for i in 1:2, j in 3:4
-end
-```
-"""
-function learn_for_comma()
-    ijs = []
+# Learn for-loop syntax
+# ```
+# for i in 1:2, j in 3:4
+# end
+# ```
+# """
+# function learn_for_comma()
+#     ijs = []
 
-    for i in 1:2, j in 3:4 # loop through j first
-        push!(ijs, (i,j))
-    end
+#     for i in 1:2, j in 3:4 # loop through j first
+#         push!(ijs, (i,j))
+#     end
 
-    @test [
-        (1,3),
-        (1,4),
-        (2,3),
-        (2,4)
-    ] == ijs
-end
+#     @test [
+#         (1,3),
+#         (1,4),
+#         (2,3),
+#         (2,4)
+#     ] == ijs
+# end
 
-"""
-    learn_comprehension()
+# """
+#     learn_comprehension()
 
-There are two ways to do two for-loops using comprehension.
-"""
-function learn_comprehension()
-    # List of pairs
-    x1 = [(i,j) for i in 1:2 for j in 3:4]
-    @test [
-        (1, 3), 
-        (1, 4), 
-        (2, 3), 
-        (2, 4)
-    ] == x1
+# There are two ways to do two for-loops using comprehension.
+# """
+# function learn_comprehension()
+#     # List of pairs
+#     x1 = [(i,j) for i in 1:2 for j in 3:4]
+#     @test [
+#         (1, 3), 
+#         (1, 4), 
+#         (2, 3), 
+#         (2, 4)
+#     ] == x1
 
-    # Matrix of pairs
-    x2 = [(i,j) for i in 1:2,j in 3:4]
-    @test [
-        (1, 3) (1, 4); 
-        (2, 3) (2, 4)
-    ] == x2
+#     # Matrix of pairs
+#     x2 = [(i,j) for i in 1:2,j in 3:4]
+#     @test [
+#         (1, 3) (1, 4); 
+#         (2, 3) (2, 4)
+#     ] == x2
 
-    # Flatten
-    # Notice the order is different from x1
-    @test [(1, 3), (2, 3), (1, 4), (2, 4)] == x2[:]
-    @test [
-        (1, 3), 
-        (2, 3), 
-        (1, 4), 
-        (2, 4)
-    ] == vec(x2)
-end
+#     # Flatten
+#     # Notice the order is different from x1
+#     @test [(1, 3), (2, 3), (1, 4), (2, 4)] == x2[:]
+#     @test [
+#         (1, 3), 
+#         (2, 3), 
+#         (1, 4), 
+#         (2, 4)
+#     ] == vec(x2)
+# end
 
-function learn_for_zip()
-    # Learn zip 3 arrays
-    Ans = []
-    for (i,j,k) in zip([1,2], [3,4], [5,6])
-        push!(Ans, (i,j,k))
-    end 
+# function learn_for_zip()
+#     # Learn zip 3 arrays
+#     Ans = []
+#     for (i,j,k) in zip([1,2], [3,4], [5,6])
+#         push!(Ans, (i,j,k))
+#     end 
 
-    @test [
-        (1,3,5),
-        (2,4,6)
-    ] == Ans
+#     @test [
+#         (1,3,5),
+#         (2,4,6)
+#     ] == Ans
 
 
-    # Learn enumerate with zip
-    Ans = []
-    for (ind, (i,j,k)) in enumerate(zip([1,2], [3,4], [5,6]))
-        push!(Ans, [ind, i,j,k])
-    end
+#     # Learn enumerate with zip
+#     Ans = []
+#     for (ind, (i,j,k)) in enumerate(zip([1,2], [3,4], [5,6]))
+#         push!(Ans, [ind, i,j,k])
+#     end
 
-    @test Ans == [
-        [1,1,3,5],
-        [2,2,4,6],
-    ]
-end
+#     @test Ans == [
+#         [1,1,3,5],
+#         [2,2,4,6],
+#     ]
+# end
 
-function learn_CartesianIndex()
-    ind = CartesianIndex(1,2,3)
+# function learn_CartesianIndex()
+#     ind = CartesianIndex(1,2,3)
 
-    @test (1,2,3) == ind.I
+#     @test (1,2,3) == ind.I
 
-    inds = [CartesianIndex(1,2,3), CartesianIndex(4,5,6)]
-    shifted_inds = [ind + CartesianIndex(1,0,0) for ind in inds]
-    @test shifted_inds == [CartesianIndex(2,2,3), CartesianIndex(5,5,6)]
+#     inds = [CartesianIndex(1,2,3), CartesianIndex(4,5,6)]
+#     shifted_inds = [ind + CartesianIndex(1,0,0) for ind in inds]
+#     @test shifted_inds == [CartesianIndex(2,2,3), CartesianIndex(5,5,6)]
     
-end
+# end
 
 function learn_Serialization()
     node = LearnJulia.Node(13)
@@ -733,27 +735,25 @@ CartesianIndex, CartesianIndices
 `#CartesianIndex, #CartesianIndices`
 """
 function learn_julia_8()
-    # shortcut
-    CI = CartesianIndex
-    CIS = CartesianIndices
-
-    ## CartesianIndex
-    @test (1,2) == CartesianIndex(1,2).I 
-    @test [(1,2), (2,3)] == getproperty.(CartesianIndex{2}[CI(1,2), CI(2,3)], :I)
+    ## Access internal values
+    @test (1,2) == CartesianIndex{2}(1,2).I 
+    @test (1,2) == getproperty.(CartesianIndex{2}(1,2), :I)
     
+    ## Access array with CartesianIndex
     v = [2,4,6,8]
-    @test 4 == v[CI(2)]
-    @test 6 == v[CI(3)]
-
-    v = [2  4  6;
-         8 10 12;]
-    @test 4  == v[CI(1,2)]
-    @test 12 == v[CI(2,3)]
+    @test 4 == v[CartesianIndex(2)]
+    @test 6 == v[CartesianIndex(3)]
+    v = [2  4  6; 8 10 12;]
+    @test 4  == v[CartesianIndex(1,2)]
+    @test 12 == v[CartesianIndex(2,3)]
 
     ## CartesianIndices
     v = [2,4,6,8]
-    @test v[2:4] == v[CartesianIndices( (2:4,) )]
-    @test [CI(2),CI(3),CI(4)] == CartesianIndices( (2:4,) )
+    @test v[CartesianIndices( (2:4,) )] == v[2:4]
+    @test CartesianIndices( (2:4,) ) == [CartesianIndex(i) for i in 2:4]
+
+    ## Arithmetic 
+    @test CartesianIndex(3,4) == CartesianIndex(1,1) + CartesianIndex(2,3)
 end
 
 """
@@ -818,15 +818,67 @@ function learn_julia_10()
 end
 
 """
-    run_all()
+For-loop
+
+`#for`
+"""
+function learn_julia_11()
+    ijs = []
+
+    for i in 1:2, j in 3:4 # loop through j first
+        push!(ijs, (i,j))
+    end
+
+    @test [(1,3), (1,4), (2,3), (2,4)] == ijs
+end
+
+"""
+List comprehension
+
+`#[]`
+"""
+function learn_julia_12()
+    # List
+    @test [i for i in 1:4] == [1,2,3,4]
+   
+    # List, use two for-loop
+    @test [(i,j) for i in 1:2 for j in 3:4] == [(1, 3), (1, 4), (2, 3), (2, 4)]
+   
+    # Matrix, i and j separated by comma
+    @test [(i,j) for i in 1:2, j in 3:4] == [(1, 3) (1, 4); 
+                                             (2, 3) (2, 4);]
+end
+
+"""
+Zip
+
+`#zip`
+"""
+function learn_julia_13()
+    # zip 2 arrays
+    X = []
+    for (i,j) in zip(["A","B"], ["a","b"],)
+        push!(X, "$i$j")
+    end
+    @test X == ["Aa","Bb"]
+
+    # zip and enumeration
+    X = []
+    for (ind, (i, j)) in enumerate(zip(["A","B"], ["a","b"],))
+        push!(X, "$(ind)$(i)$(j)")
+    end
+    @test X == ["1Aa","2Bb"]
+end
+
+"""
+    run_all(ids)
  
 Run all `learn_julia` functions.
 Run with `include("learn_julia.jl");LearnJulia.run_all();`
 """
-function run_all()
-    n = 10
-    @testset "All" begin
-        for i in 1:n
+function run_all(ids=1:13; name="All")
+    @testset "$(name)" begin
+        for i in ids
             eval(Meta.parse("LearnJulia.learn_julia_$(i)()"))
         end
     end
