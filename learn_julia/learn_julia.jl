@@ -297,68 +297,68 @@ end
     
 # end
 
-function learn_Serialization()
-    node = LearnJulia.Node(13)
+# function learn_Serialization()
+#     node = LearnJulia.Node(13)
 
-    filename = "serialization.jls"
-    open(filename, "w") do io
-        Serialization.serialize(io, node)
-    end
+#     filename = "serialization.jls"
+#     open(filename, "w") do io
+#         Serialization.serialize(io, node)
+#     end
 
-    node_deserialized = Serialization.deserialize(filename)
+#     node_deserialized = Serialization.deserialize(filename)
 
-    @test node_deserialized == node
-end
+#     @test node_deserialized == node
+# end
 
-function learn_Matrix()
-    A = Matrix{Int64}(undef, 2, 2)
-    A .= [1 2; 
-          3 4;]
-    @test A == [1 2; 3 4;]
-    @test A[2,1] == 3
-    @test A[1,2] == 2
+# function learn_Matrix()
+#     A = Matrix{Int64}(undef, 2, 2)
+#     A .= [1 2; 
+#           3 4;]
+#     @test A == [1 2; 3 4;]
+#     @test A[2,1] == 3
+#     @test A[1,2] == 2
     
-    A = Int64[1 2; 3 4] # Another way to init a matrix
-    @test A == [1 2; 3 4;]
-    @test A[2,1] == 3
-    @test A[1,2] == 2
+#     A = Int64[1 2; 3 4] # Another way to init a matrix
+#     @test A == [1 2; 3 4;]
+#     @test A[2,1] == 3
+#     @test A[1,2] == 2
 
-    B = Matrix{Bool}(undef, 2,2)
-    B .= [
-        1 1;
-        0 0;
-    ]
-    @test B == [true true; false false;]
-    @test B[2,1] == 0
-    @test B[1,2] == 1
+#     B = Matrix{Bool}(undef, 2,2)
+#     B .= [
+#         1 1;
+#         0 0;
+#     ]
+#     @test B == [true true; false false;]
+#     @test B[2,1] == 0
+#     @test B[1,2] == 1
 
-    B = Bool[true true; false false;]
-    @test B == [true true; false false;]
-    @test B[2,1] == false
-    @test B[1,2] == true
-end
+#     B = Bool[true true; false false;]
+#     @test B == [true true; false false;]
+#     @test B[2,1] == false
+#     @test B[1,2] == true
+# end
 
-function learn_floor_fld_ceil_cld()
-    @test floor(11/3) == 3
-    @test floor(11/3) isa Float64
-    @test   fld(11,3) == 3
-    @test   fld(11,3) isa Int64
+# function learn_floor_fld_ceil_cld()
+#     @test floor(11/3) == 3
+#     @test floor(11/3) isa Float64
+#     @test   fld(11,3) == 3
+#     @test   fld(11,3) isa Int64
 
-    @test floor(-11/3) == -4
-    @test floor(-11/3) isa Float64
-    @test   fld(-11,3) == -4
-    @test   fld(-11,3) isa Int64
+#     @test floor(-11/3) == -4
+#     @test floor(-11/3) isa Float64
+#     @test   fld(-11,3) == -4
+#     @test   fld(-11,3) isa Int64
 
-    @test ceil(11/3) == 4
-    @test ceil(11/3) isa Float64
-    @test  cld(11,3) == 4
-    @test  cld(11,3) isa Int64
+#     @test ceil(11/3) == 4
+#     @test ceil(11/3) isa Float64
+#     @test  cld(11,3) == 4
+#     @test  cld(11,3) isa Int64
 
-    @test ceil(-11/3) == -3
-    @test ceil(-11/3) isa Float64
-    @test  cld(-11,3) == -3
-    @test  cld(-11,3) isa Int64
-end
+#     @test ceil(-11/3) == -3
+#     @test ceil(-11/3) isa Float64
+#     @test  cld(-11,3) == -3
+#     @test  cld(-11,3) isa Int64
+# end
 
 """
 
@@ -871,12 +871,120 @@ function learn_julia_13()
 end
 
 """
+Serialization
+
+`serialize`
+"""
+function learn_julia_14()
+    filename = "tmp_serialization.jls"
+    open(filename, "w") do io
+        Serialization.serialize(io, Node(13))
+    end
+    @test Node(13) == Serialization.deserialize(filename)
+
+    open(filename, "w") do io
+        Serialization.serialize(io, [Node(13), Node(17), 13, 1.65])
+    end
+    @test Serialization.deserialize(filename) == [Node(13), Node(17), 13, 1.65]
+
+    # tmp file not deleted
+end
+
+"""
+Matrix
+"""
+function learn_julia_15()
+    # Matrix with undef values
+    X = Matrix{Int64}(undef,2,2)
+    X = Matrix{Float64}(undef,2,2)
+    X = Array{Int,2}(undef,2,2)
+    
+    X = Int64[1 2; 3 4;]
+    @test X[1,1] == 1; @test X[2,1] == 3;
+    
+    X = fill(Float64(1.0), 2,2)
+    @test size(X) == (2,2)
+    @test all(==(1.0), X); @test all(x->isa(x,Float64), X);
+
+    X = Int64[1 2; 3 4;]
+    @test X[:,2] == [2,4]
+    @test X[2,:] == [3,4]
+end
+
+"""
+Round
+
+`#floor #fld #ceil #cld`
+"""
+function learn_julia_16()
+    @test floor(11/3) == 3
+    @test floor(11/3) isa Float64
+    @test   fld(11,3) == 3
+    @test   fld(11,3) isa Int64
+
+    @test floor(-11/3) == -4
+    @test floor(-11/3) isa Float64
+    @test   fld(-11,3) == -4
+    @test   fld(-11,3) isa Int64
+
+    @test ceil(11/3) == 4
+    @test ceil(11/3) isa Float64
+    @test  cld(11,3) == 4
+    @test  cld(11,3) isa Int64
+
+    @test ceil(-11/3) == -3
+    @test ceil(-11/3) isa Float64
+    @test  cld(-11,3) == -3
+    @test  cld(-11,3) isa Int64
+
+    
+end
+
+"""
+Mod
+
+`#mod #rem #%`
+"""
+function learn_julia_17()
+    @test mod(13,4) == 1
+    @test rem(13,4) == 1
+    @test 13 % 4 == 1
+
+    # 0      7   10    14
+    # |      |-3-|--4--|
+    x = 10; y = 7;
+    @test rem(x,y,RoundToZero)   == 3
+    @test rem(x,y,RoundNearest)  == 3
+    @test rem(x,y,RoundDown)     == 3
+    @test rem(x,y,RoundUp)       == -4
+    @show rem(x,y,RoundFromZero) == -4
+
+    # Interesting but not useful
+    # x = -10; y = 6;
+    # @show rem(x,y,RoundToZero)
+    # @show rem(x,y,RoundNearest)
+    # @show rem(x,y,RoundDown)
+    # @show rem(x,y,RoundUp)
+    # @show rem(x,y,RoundFromZero)
+    # x = 10; y = -6;
+    # @show rem(x,y,RoundToZero)
+    # @show rem(x,y,RoundNearest)
+    # @show rem(x,y,RoundDown)
+    # @show rem(x,y,RoundUp)
+    # @show rem(x,y,RoundFromZero)
+
+    # what is this for?
+    # mod(x::Integer, r::AbstractUnitRange)
+end
+
+"""
     run_all(ids)
  
 Run all `learn_julia` functions.
 Run with `include("learn_julia.jl");LearnJulia.run_all();`
 """
-function run_all(ids=1:13; name="All")
+function run_all(ids=1:17; name="All")
+    if isa(ids,Integer) ids = ids:ids end
     @testset "$(name)" begin
         for i in ids
             eval(Meta.parse("LearnJulia.learn_julia_$(i)()"))
