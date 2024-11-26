@@ -3,4 +3,6 @@ authors = ["Yi-Kun Yang <ykyang@gmail.com>"]
 version = "0.0.1"
 
 [deps]
+Plots = "91a5bcdd-55d7-5caf-9e0b-520d859cae80"
+Polynomials = "f27b6e38-b328-58d1-80ce-0feddd5e7a45"
 TerminalPager = "0c614874-6106-40ed-a7c2-2f1cd0bff883"
