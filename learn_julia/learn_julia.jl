@@ -1,6 +1,8 @@
 # Learn basic Julia stuff
 """
 Learn Julia
+
+Learn Juia syntax and functions.  Use `run_all()` to run functions.
 """
 module LearnJulia
 
@@ -203,160 +205,160 @@ end
 #     @test 2 == i
 # end
 
-"""
+# """
 
-Learn for-loop syntax
-```
-for i in 1:2, j in 3:4
-end
-```
-"""
-function learn_for_comma()
-    ijs = []
+# Learn for-loop syntax
+# ```
+# for i in 1:2, j in 3:4
+# end
+# ```
+# """
+# function learn_for_comma()
+#     ijs = []
 
-    for i in 1:2, j in 3:4 # loop through j first
-        push!(ijs, (i,j))
-    end
+#     for i in 1:2, j in 3:4 # loop through j first
+#         push!(ijs, (i,j))
+#     end
 
-    @test [
-        (1,3),
-        (1,4),
-        (2,3),
-        (2,4)
-    ] == ijs
-end
+#     @test [
+#         (1,3),
+#         (1,4),
+#         (2,3),
+#         (2,4)
+#     ] == ijs
+# end
 
-"""
-    learn_comprehension()
+# """
+#     learn_comprehension()
 
-There are two ways to do two for-loops using comprehension.
-"""
-function learn_comprehension()
-    # List of pairs
-    x1 = [(i,j) for i in 1:2 for j in 3:4]
-    @test [
-        (1, 3), 
-        (1, 4), 
-        (2, 3), 
-        (2, 4)
-    ] == x1
+# There are two ways to do two for-loops using comprehension.
+# """
+# function learn_comprehension()
+#     # List of pairs
+#     x1 = [(i,j) for i in 1:2 for j in 3:4]
+#     @test [
+#         (1, 3), 
+#         (1, 4), 
+#         (2, 3), 
+#         (2, 4)
+#     ] == x1
 
-    # Matrix of pairs
-    x2 = [(i,j) for i in 1:2,j in 3:4]
-    @test [
-        (1, 3) (1, 4); 
-        (2, 3) (2, 4)
-    ] == x2
+#     # Matrix of pairs
+#     x2 = [(i,j) for i in 1:2,j in 3:4]
+#     @test [
+#         (1, 3) (1, 4); 
+#         (2, 3) (2, 4)
+#     ] == x2
 
-    # Flatten
-    # Notice the order is different from x1
-    @test [(1, 3), (2, 3), (1, 4), (2, 4)] == x2[:]
-    @test [
-        (1, 3), 
-        (2, 3), 
-        (1, 4), 
-        (2, 4)
-    ] == vec(x2)
-end
+#     # Flatten
+#     # Notice the order is different from x1
+#     @test [(1, 3), (2, 3), (1, 4), (2, 4)] == x2[:]
+#     @test [
+#         (1, 3), 
+#         (2, 3), 
+#         (1, 4), 
+#         (2, 4)
+#     ] == vec(x2)
+# end
 
-function learn_for_zip()
-    # Learn zip 3 arrays
-    Ans = []
-    for (i,j,k) in zip([1,2], [3,4], [5,6])
-        push!(Ans, (i,j,k))
-    end 
+# function learn_for_zip()
+#     # Learn zip 3 arrays
+#     Ans = []
+#     for (i,j,k) in zip([1,2], [3,4], [5,6])
+#         push!(Ans, (i,j,k))
+#     end 
 
-    @test [
-        (1,3,5),
-        (2,4,6)
-    ] == Ans
+#     @test [
+#         (1,3,5),
+#         (2,4,6)
+#     ] == Ans
 
 
-    # Learn enumerate with zip
-    Ans = []
-    for (ind, (i,j,k)) in enumerate(zip([1,2], [3,4], [5,6]))
-        push!(Ans, [ind, i,j,k])
-    end
+#     # Learn enumerate with zip
+#     Ans = []
+#     for (ind, (i,j,k)) in enumerate(zip([1,2], [3,4], [5,6]))
+#         push!(Ans, [ind, i,j,k])
+#     end
 
-    @test Ans == [
-        [1,1,3,5],
-        [2,2,4,6],
-    ]
-end
+#     @test Ans == [
+#         [1,1,3,5],
+#         [2,2,4,6],
+#     ]
+# end
 
-function learn_CartesianIndex()
-    ind = CartesianIndex(1,2,3)
+# function learn_CartesianIndex()
+#     ind = CartesianIndex(1,2,3)
 
-    @test (1,2,3) == ind.I
+#     @test (1,2,3) == ind.I
 
-    inds = [CartesianIndex(1,2,3), CartesianIndex(4,5,6)]
-    shifted_inds = [ind + CartesianIndex(1,0,0) for ind in inds]
-    @test shifted_inds == [CartesianIndex(2,2,3), CartesianIndex(5,5,6)]
+#     inds = [CartesianIndex(1,2,3), CartesianIndex(4,5,6)]
+#     shifted_inds = [ind + CartesianIndex(1,0,0) for ind in inds]
+#     @test shifted_inds == [CartesianIndex(2,2,3), CartesianIndex(5,5,6)]
     
-end
+# end
 
-function learn_Serialization()
-    node = LearnJulia.Node(13)
+# function learn_Serialization()
+#     node = LearnJulia.Node(13)
 
-    filename = "serialization.jls"
-    open(filename, "w") do io
-        Serialization.serialize(io, node)
-    end
+#     filename = "serialization.jls"
+#     open(filename, "w") do io
+#         Serialization.serialize(io, node)
+#     end
 
-    node_deserialized = Serialization.deserialize(filename)
+#     node_deserialized = Serialization.deserialize(filename)
 
-    @test node_deserialized == node
-end
+#     @test node_deserialized == node
+# end
 
-function learn_Matrix()
-    A = Matrix{Int64}(undef, 2, 2)
-    A .= [1 2; 
-          3 4;]
-    @test A == [1 2; 3 4;]
-    @test A[2,1] == 3
-    @test A[1,2] == 2
+# function learn_Matrix()
+#     A = Matrix{Int64}(undef, 2, 2)
+#     A .= [1 2; 
+#           3 4;]
+#     @test A == [1 2; 3 4;]
+#     @test A[2,1] == 3
+#     @test A[1,2] == 2
     
-    A = Int64[1 2; 3 4] # Another way to init a matrix
-    @test A == [1 2; 3 4;]
-    @test A[2,1] == 3
-    @test A[1,2] == 2
+#     A = Int64[1 2; 3 4] # Another way to init a matrix
+#     @test A == [1 2; 3 4;]
+#     @test A[2,1] == 3
+#     @test A[1,2] == 2
 
-    B = Matrix{Bool}(undef, 2,2)
-    B .= [
-        1 1;
-        0 0;
-    ]
-    @test B == [true true; false false;]
-    @test B[2,1] == 0
-    @test B[1,2] == 1
+#     B = Matrix{Bool}(undef, 2,2)
+#     B .= [
+#         1 1;
+#         0 0;
+#     ]
+#     @test B == [true true; false false;]
+#     @test B[2,1] == 0
+#     @test B[1,2] == 1
 
-    B = Bool[true true; false false;]
-    @test B == [true true; false false;]
-    @test B[2,1] == false
-    @test B[1,2] == true
-end
+#     B = Bool[true true; false false;]
+#     @test B == [true true; false false;]
+#     @test B[2,1] == false
+#     @test B[1,2] == true
+# end
 
-function learn_floor_fld_ceil_cld()
-    @test floor(11/3) == 3
-    @test floor(11/3) isa Float64
-    @test   fld(11,3) == 3
-    @test   fld(11,3) isa Int64
+# function learn_floor_fld_ceil_cld()
+#     @test floor(11/3) == 3
+#     @test floor(11/3) isa Float64
+#     @test   fld(11,3) == 3
+#     @test   fld(11,3) isa Int64
 
-    @test floor(-11/3) == -4
-    @test floor(-11/3) isa Float64
-    @test   fld(-11,3) == -4
-    @test   fld(-11,3) isa Int64
+#     @test floor(-11/3) == -4
+#     @test floor(-11/3) isa Float64
+#     @test   fld(-11,3) == -4
+#     @test   fld(-11,3) isa Int64
 
-    @test ceil(11/3) == 4
-    @test ceil(11/3) isa Float64
-    @test  cld(11,3) == 4
-    @test  cld(11,3) isa Int64
+#     @test ceil(11/3) == 4
+#     @test ceil(11/3) isa Float64
+#     @test  cld(11,3) == 4
+#     @test  cld(11,3) isa Int64
 
-    @test ceil(-11/3) == -3
-    @test ceil(-11/3) isa Float64
-    @test  cld(-11,3) == -3
-    @test  cld(-11,3) isa Int64
-end
+#     @test ceil(-11/3) == -3
+#     @test ceil(-11/3) isa Float64
+#     @test  cld(-11,3) == -3
+#     @test  cld(-11,3) isa Int64
+# end
 
 """
 
@@ -703,16 +705,14 @@ Search a sorted array, and return range or index.
 function learn_julia_7()
     ## searchsorted
     v = Float64[1,2,4,5,5,7]
-
     @test 3:3 == searchsorted(v, 4) # single match
     @test 4:5 == searchsorted(v, 5) # multiple match
     @test 3:2 == searchsorted(v, 3) # no match
-    @test 3 == (3:2).start
+    @test 3 == (3:2).start          # access range
     @test 7:6 == searchsorted(v, 9) # no match
 
     ## searchsortedfirst
     v = Float64[1,2,4,5,5,7]
-
     @test 3 == searchsortedfirst(v, 4) # index
     @test 4 == searchsortedfirst(v, 5) # index
     @test 3 == searchsortedfirst(v, 3) # index
@@ -721,7 +721,6 @@ function learn_julia_7()
 
     ## searchsortedlast
     v = Float64[1,2,4,5,5,7]
-
     @test 3 == searchsortedlast(v, 4) # index
     @test 5 == searchsortedlast(v, 5) # index
     @test 2 == searchsortedlast(v, 3) # index
@@ -730,15 +729,264 @@ function learn_julia_7()
 end
 
 """
-    run_all()
+CartesianIndex, CartesianIndices
+
+
+`#CartesianIndex, #CartesianIndices`
+"""
+function learn_julia_8()
+    ## Access internal values
+    @test (1,2) == CartesianIndex{2}(1,2).I 
+    @test (1,2) == getproperty.(CartesianIndex{2}(1,2), :I)
+    
+    ## Access array with CartesianIndex
+    v = [2,4,6,8]
+    @test 4 == v[CartesianIndex(2)]
+    @test 6 == v[CartesianIndex(3)]
+    v = [2  4  6; 8 10 12;]
+    @test 4  == v[CartesianIndex(1,2)]
+    @test 12 == v[CartesianIndex(2,3)]
+
+    ## CartesianIndices
+    v = [2,4,6,8]
+    @test v[CartesianIndices( (2:4,) )] == v[2:4]
+    @test CartesianIndices( (2:4,) ) == [CartesianIndex(i) for i in 2:4]
+
+    ## Arithmetic 
+    @test CartesianIndex(3,4) == CartesianIndex(1,1) + CartesianIndex(2,3)
+end
+
+"""
+Find
+
+`#findall #findfirst #findmax`
+"""
+function learn_julia_9()
+    # shortcut
+    CI = CartesianIndex 
+    let # findall, Array
+        v = Int64[1,3,4]
+        #@test isa(findall(isodd,v), Vector{Int64})
+        @test [1,2] == findall(isodd, v)
+    
+        v = Int64[1 2 0; 
+                  3 4 0;]
+        #@test isa(findall(isodd, v), Vector{CartesianIndex{2}})
+        @test [CI(1,1), CI(2,1)] == findall(isodd, v)
+        # Notice the sequence is column first
+        @test [CI(1,1),CI(2,1),CI(1,2),CI(2,2)] == findall(!iszero, v)
+    end
+    let # findall, Dict
+        ## Compare values, return keys
+        v = Dict(:A=>10, :B=>-1, :C=>0)
+        @test [:A,:C] == findall(x->x >= 0, v)
+    end
+    let # findfirst
+        v = [1,4,2,2]
+        @test 2 == findfirst(iseven, v)
+    end
+    let # findmax, findmax!
+        v = [2,3,4]
+        @test (16,3) == findmax(x->x^2, v) # (value,index)
+
+        rval = [1] # value does not matter
+        rind = [1] # value does not matter
+        @test ([4],[3]) == findmax!(rval,rind,v)
+        @test [4] == rval
+        @test [3] == rind
+    end
+end
+
+"""
+Filter
+
+`#filter`
+"""
+function learn_julia_10()
+    let # filter, Array
+        v = 1:10
+        @test 1:2:10 == filter(isodd, v) # [1, 3, 5, ...]
+
+        fn = filter(iseven) # Create a filter with predicate
+        @test 2:2:10 == fn(v)
+    end
+    let # filter, Dict
+        v = Dict(1=>"a", 2=>"b")
+        @test Dict(1=>"a") == filter(x->isodd(x.first), v) 
+    end
+
+end
+
+"""
+For-loop
+
+`#for`
+"""
+function learn_julia_11()
+    ijs = []
+
+    for i in 1:2, j in 3:4 # loop through j first
+        push!(ijs, (i,j))
+    end
+
+    @test [(1,3), (1,4), (2,3), (2,4)] == ijs
+end
+
+"""
+List comprehension
+
+`#[]`
+"""
+function learn_julia_12()
+    # List
+    @test [i for i in 1:4] == [1,2,3,4]
+   
+    # List, use two for-loop
+    @test [(i,j) for i in 1:2 for j in 3:4] == [(1, 3), (1, 4), (2, 3), (2, 4)]
+   
+    # Matrix, i and j separated by comma
+    @test [(i,j) for i in 1:2, j in 3:4] == [(1, 3) (1, 4); 
+                                             (2, 3) (2, 4);]
+end
+
+"""
+Zip
+
+`#zip`
+"""
+function learn_julia_13()
+    # zip 2 arrays
+    X = []
+    for (i,j) in zip(["A","B"], ["a","b"],)
+        push!(X, "$i$j")
+    end
+    @test X == ["Aa","Bb"]
+
+    # zip and enumeration
+    X = []
+    for (ind, (i, j)) in enumerate(zip(["A","B"], ["a","b"],))
+        push!(X, "$(ind)$(i)$(j)")
+    end
+    @test X == ["1Aa","2Bb"]
+end
+
+"""
+Serialization
+
+`serialize`
+"""
+function learn_julia_14()
+    filename = "tmp_serialization.jls"
+    open(filename, "w") do io
+        Serialization.serialize(io, Node(13))
+    end
+    @test Node(13) == Serialization.deserialize(filename)
+
+    open(filename, "w") do io
+        Serialization.serialize(io, [Node(13), Node(17), 13, 1.65])
+    end
+    @test Serialization.deserialize(filename) == [Node(13), Node(17), 13, 1.65]
+
+    # tmp file not deleted
+end
+
+"""
+Matrix
+"""
+function learn_julia_15()
+    # Matrix with undef values
+    X = Matrix{Int64}(undef,2,2)
+    X = Matrix{Float64}(undef,2,2)
+    X = Array{Int,2}(undef,2,2)
+    
+    X = Int64[1 2; 3 4;]
+    @test X[1,1] == 1; @test X[2,1] == 3;
+    
+    X = fill(Float64(1.0), 2,2)
+    @test size(X) == (2,2)
+    @test all(==(1.0), X); @test all(x->isa(x,Float64), X);
+
+    X = Int64[1 2; 3 4;]
+    @test X[:,2] == [2,4]
+    @test X[2,:] == [3,4]
+end
+
+"""
+Round
+
+`#floor #fld #ceil #cld`
+"""
+function learn_julia_16()
+    @test floor(11/3) == 3
+    @test floor(11/3) isa Float64
+    @test   fld(11,3) == 3
+    @test   fld(11,3) isa Int64
+
+    @test floor(-11/3) == -4
+    @test floor(-11/3) isa Float64
+    @test   fld(-11,3) == -4
+    @test   fld(-11,3) isa Int64
+
+    @test ceil(11/3) == 4
+    @test ceil(11/3) isa Float64
+    @test  cld(11,3) == 4
+    @test  cld(11,3) isa Int64
+
+    @test ceil(-11/3) == -3
+    @test ceil(-11/3) isa Float64
+    @test  cld(-11,3) == -3
+    @test  cld(-11,3) isa Int64
+
+    
+end
+
+"""
+Mod
+
+`#mod #rem #%`
+"""
+function learn_julia_17()
+    @test mod(13,4) == 1
+    @test rem(13,4) == 1
+    @test 13 % 4 == 1
+
+    # 0      7   10    14
+    # |      |-3-|--4--|
+    x = 10; y = 7;
+    @test rem(x,y,RoundToZero)   == 3
+    @test rem(x,y,RoundNearest)  == 3
+    @test rem(x,y,RoundDown)     == 3
+    @test rem(x,y,RoundUp)       == -4
+    @show rem(x,y,RoundFromZero) == -4
+
+    # Interesting but not useful
+    # x = -10; y = 6;
+    # @show rem(x,y,RoundToZero)
+    # @show rem(x,y,RoundNearest)
+    # @show rem(x,y,RoundDown)
+    # @show rem(x,y,RoundUp)
+    # @show rem(x,y,RoundFromZero)
+    # x = 10; y = -6;
+    # @show rem(x,y,RoundToZero)
+    # @show rem(x,y,RoundNearest)
+    # @show rem(x,y,RoundDown)
+    # @show rem(x,y,RoundUp)
+    # @show rem(x,y,RoundFromZero)
+
+    # what is this for?
+    # mod(x::Integer, r::AbstractUnitRange)
+end
+
+"""
+    run_all(ids)
  
 Run all `learn_julia` functions.
 Run with `include("learn_julia.jl");LearnJulia.run_all();`
 """
-function run_all()
-    n = 7
-    @testset "All" begin
-        for i in 1:n
+function run_all(ids=1:17; name="All")
+    if isa(ids,Integer) ids = ids:ids end
+    @testset "$(name)" begin
+        for i in ids
             eval(Meta.parse("LearnJulia.learn_julia_$(i)()"))
         end
     end
