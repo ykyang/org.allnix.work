@@ -9,7 +9,7 @@ using Polynomials
 # gr()      # fast
 # plotly()  # good for interaction
 
-function learn_1() # Polynomial
+function learn_plots_1() # Polynomial
     gr()
     pt = plot(title="Learn how to plot", size=(600,600))
     f = Polynomial([0,0,1])
@@ -18,7 +18,7 @@ function learn_1() # Polynomial
     gui(pt)
 end
 
-function learn_2() # Surface
+function learn_plots_2() # Surface
     gr(); #plotly();
     # https://docs.juliaplots.org/stable/backends/#Fine-tuning
     x = range(-3, 3, length=30)
