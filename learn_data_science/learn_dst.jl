@@ -17,6 +17,7 @@ using RDatasets # dataset,
 using DataFrames
 using CSV
 using StatsBase # describe,
+using CategoricalArrays # categorical
 
 # Loading and elementary processing of data        https://juliaai.github.io/DataScienceTutorials.jl/data/loading/#loading_and_elementary_processing_of_data
 function learn_dst_1() # Using RDatasets
@@ -154,9 +155,41 @@ function learn_dst_5()
     # :q25, :q75
     # :eltype, :nunique, :nmissing
 
+
 end
 
+## Handling categorical data        https://juliaai.github.io/DataScienceTutorials.jl/data/categorical/#handling_categorical_data
+function learn_dst_6() 
+    @info "learn_dst_6()"
 
+    ## Defining a categorical vector
+    v = categorical(["AA", "BB", "CC", "AA", "BB", "CC", ])
+    @test levels(v) == ["AA", "BB", "CC"]
+
+    ## Working with categoricals
+    ### Ordered categoricals
+    v = categorical([1,2,3,1,2,3,1,2,3], ordered=true)
+    @test levels(v) ==  [1, 2, 3]
+    @test v[1] < v[2]
+
+    v = categorical(["high", "med", "low", "high", "med", "low"], ordered=true)
+    @test levels(v) == ["high", "low", "med",] # alphabetical order
+    @test v[1] < v[2]
+
+    v = categorical(["high", "med", "low", "high", "med", "low"], levels=["low", "med", "high"], ordered=true)
+    # levels!(v, ["low", "med", "high"]) # use this if not specified above
+    @test levels(v) == ["low", "med", "high"] # proveded order
+    @test v[1] > v[2]
+
+    ### Missing values
+    v = categorical(["AA", "BB", missing, "AA", "BB", "CC"])
+    @test levels(v) == ["AA", "BB", "CC"]
+    
+end
+
+## Scientific Types        https://juliaai.github.io/DataScienceTutorials.jl/data/scitype/#data_interpretation_scientific_types
+function learn_dst_7()
+end
 
 
 
