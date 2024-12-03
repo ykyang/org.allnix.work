@@ -129,7 +129,7 @@ function learn_dst_4() # Using CSV, Example 2
 
     return data
 end
-# Manipulating a DataFrame        https://juliaai.github.io/DataScienceTutorials.jl/data/dataframe/#manipulating_a_dataframe
+## Manipulating a DataFrame        https://juliaai.github.io/DataScienceTutorials.jl/data/dataframe/#manipulating_a_dataframe
 function learn_dst_5()
     @info "learn_dst_5()"
 
@@ -175,14 +175,32 @@ function learn_dst_5()
 
     ## Split-Apply-Combine
     iris = dataset("datasets", "iris")
-    @info first(iris,3)
-    @test unique(iris[!,:Species]) ==  ["setosa", "versicolor", "virginica"]
-    ### groupby
+    #@info first(iris,3)
     
+    ### groupby
+    @test unique(iris[!,:Species]) ==  ["setosa", "versicolor", "virginica"]
+    #gdf = groupby(iris, :Species)
+    #@info gdf
+    #@info describe(gdf[1])
+    #@info describe(gdf[2])
+    #@info describe(gdf[3])
+    
+    ### combine
+    #df = DataFrame(a=1:3, b=4:6)
+    #@info df
+    #@info combine(df, :a=>sum, nrow)
+
+    ### combine with groupby
+    gdf = groupby(iris, :Species)
+    #df = combine(gdf, :PetalLength=>mean)
+    #@info df
+    #df = combine(gdf, :PetalLength=>mean=>"MPL", :PetalLength=>std=>:SPL)
+    #@info df
+    df = combine(gdf, names(iris, Not(:Species)) .=> std)
+    @info df
 
     return (boston,mao,iris)
 end
-
 ## Handling categorical data        https://juliaai.github.io/DataScienceTutorials.jl/data/categorical/#handling_categorical_data
 function learn_dst_6() 
     @info "learn_dst_6()"
@@ -211,7 +229,6 @@ function learn_dst_6()
     @test levels(v) == ["AA", "BB", "CC"]
     
 end
-
 ## Scientific Types        https://juliaai.github.io/DataScienceTutorials.jl/data/scitype/#data_interpretation_scientific_types
 function learn_dst_7()
 end
