@@ -137,23 +137,46 @@ function learn_dst_5()
 
     @test names(boston) ==  ["Crim", "Zn", "Indus", "Chas", "NOx", "Rm", "Age", "Dis", "Rad", "Tax", "PTRatio", "Black", "LStat", "MedV"]
     
-    # @info first(boston,4)
-    # @info boston[1:5, "Crim"]
-    # @info boston[1:5, [:Crim,:Zn]]
-    # @info boston[1:5, 1:2]
+    #@info first(boston,4)
+    #@info boston[1:5, "Crim"]
+    #@info boston[1:5, [:Crim,:Zn]]
+    #@info boston[1:5, 1:2]
     b1 = select(boston, [:Crim, :Zn, :Indus])
     # @info first(b1,2)
     b2 = select(boston, Not(:NOx))
-    # @info first(b2, 2)
+    #@info first(b2, 2)
     select!(b1, Not(:Crim)) # b1 changed in place
-    # @info first(b1,2)
+    #@info first(b1,2)
 
     ## Describing the data
     describe(boston, :min, :max, :median, :mean, :std, :nmissing)
     # :mean, :std, :min, :max, :median, :first, :last
     # :q25, :q75
     # :eltype, :nunique, :nmissing
+    meanabs(x) = sum(abs.(x))/length(x) # custom function
+    d = describe(boston, meanabs => "mean_abs")
+    #@info first(d,3)
 
+    ## Converting the data
+    mat = Matrix(boston)
+    #@info mat[1:3,1:3]
+    
+    ## Adding columns
+    boston[:,"Crim_x_Zn"] = boston.Crim .* boston.Zn
+    #insertcols!(boston, 3, "Crim_x_Zn" => boston.Crim .* boston.Zn)
+    
+    ## Missing values
+    mao = dataset("gap", "mao")
+    d = describe(mao, :nmissing)
+    #@info d # Age with missing values
+    @test ismissing(std(mao.Age))
+    @test isapprox(std(skipmissing(mao.Age)), 11.55, atol=0.01)
+
+    ## Split-Apply-Combine
+    iris = dataset("datasets", "iris")
+    @test unique(iris[!,:Species]) ==  ["setosa", "versicolor", "virginica"]
+
+    return (boston,mao,iris)
 end
 
 
@@ -181,7 +204,7 @@ end
 Run all `learn_julia` functions.
 Run with `include("learn_julia.jl");LearnJulia.run_all();`
 """
-function run_all(ids=1:4; name="All")
+function run_all(ids=1:5; name="All")
     if isa(ids,Integer) ids = ids:ids end
     @testset "$(name)" begin
         for i in ids
