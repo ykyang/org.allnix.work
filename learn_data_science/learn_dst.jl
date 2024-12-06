@@ -18,6 +18,7 @@ using DataFrames
 using CSV
 using StatsBase # describe,
 using CategoricalArrays # categorical
+using ScientificTypes   # schema
 
 # Loading and elementary processing of data        https://juliaai.github.io/DataScienceTutorials.jl/data/loading/#loading_and_elementary_processing_of_data
 function learn_dst_1() # Using RDatasets
@@ -129,7 +130,7 @@ function learn_dst_4() # Using CSV, Example 2
 
     return data
 end
-## Manipulating a DataFrame        https://juliaai.github.io/DataScienceTutorials.jl/data/dataframe/#manipulating_a_dataframe
+# Manipulating a DataFrame        https://juliaai.github.io/DataScienceTutorials.jl/data/dataframe/#manipulating_a_dataframe
 function learn_dst_5()
     @info "learn_dst_5()"
 
@@ -201,7 +202,7 @@ function learn_dst_5()
 
     return (boston,mao,iris)
 end
-## Handling categorical data        https://juliaai.github.io/DataScienceTutorials.jl/data/categorical/#handling_categorical_data
+# Handling categorical data        https://juliaai.github.io/DataScienceTutorials.jl/data/categorical/#handling_categorical_data
 function learn_dst_6() 
     @info "learn_dst_6()"
 
@@ -229,8 +230,52 @@ function learn_dst_6()
     @test levels(v) == ["AA", "BB", "CC"]
     
 end
-## Scientific Types        https://juliaai.github.io/DataScienceTutorials.jl/data/scitype/#data_interpretation_scientific_types
+# Scientific Types        https://juliaai.github.io/DataScienceTutorials.jl/data/scitype/#data_interpretation_scientific_types
 function learn_dst_7()
+    @info "learn_dst_7()"
+
+    ## The Scientific Types
+        """
+        Found
+        ├─ Known
+        │  ├─ Textual
+        │  ├─ Finite
+        │  │  ├─ Multiclass
+        │  │  └─ OrderedFactor
+        │  └─ Infinite
+        │     ├─ Continuous
+        │     └─ Count
+        └─ Unknown
+        """
+    ## Inspecting the scitype
+    boston = dataset("MASS", "Boston")
+    x = schema(boston)
+    #show(stdout,"text/plain", x)
+        """
+        ┌─────────┬────────────┬─────────┐
+        │ names   │ scitypes   │ types   │
+        ├─────────┼────────────┼─────────┤
+        │ Crim    │ Continuous │ Float64 │
+        │ Zn      │ Continuous │ Float64 │
+        │ Indus   │ Continuous │ Float64 │
+        │ Chas    │ Count      │ Int64   │
+        │ NOx     │ Continuous │ Float64 │
+        │ Rm      │ Continuous │ Float64 │
+        │ Age     │ Continuous │ Float64 │
+        │ Dis     │ Continuous │ Float64 │
+        │ Rad     │ Count      │ Int64   │
+        │ Tax     │ Count      │ Int64   │
+        │ PTRatio │ Continuous │ Float64 │
+        │ Black   │ Continuous │ Float64 │
+        │ LStat   │ Continuous │ Float64 │
+        │ MedV    │ Continuous │ Float64 │
+        └─────────┴────────────┴─────────┘    
+        """
+    #end show
+
+    ## Changing the scitype
+
+    #boston
 end
 
 

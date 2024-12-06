@@ -978,12 +978,61 @@ function learn_julia_17()
 end
 
 """
+    Learn IO
+
+`#io #open #flush #close #readline #IOBuffer`
+"""
+function learn_julia_18()
+    let filename = "learn_simple_write.txt"
+        open(filename, "w") do io
+            println(io, "8eef43b1-8475-491d-a8db-16b733edc15c")
+        end
+        @test isfile(filename)
+
+        line = nothing
+        open(filename, "r") do io
+            line = readline(io)
+        end
+        @test line == "8eef43b1-8475-491d-a8db-16b733edc15c"
+        
+        rm(filename)
+        @test !isfile(filename)
+    end
+    let io = IOBuffer()
+        write(io, "Hello World!")
+        @test String(take!(io)) == "Hello World!"
+    end
+end
+
+"""
+    REPL output format
+
+`#repl #show`
+"""
+function learn_julia_19()
+    let io = IOBuffer()
+        show(io, "text/plain", [1,2,3])
+        println(io)
+        
+        output = """
+        3-element Vector{Int64}:
+         1
+         2
+         3
+        """            
+        @test String(take!(io)) == output
+    end
+end
+
+
+
+"""
     run_all(ids)
  
 Run all `learn_julia` functions.
 Run with `include("learn_julia.jl");LearnJulia.run_all();`
 """
-function run_all(ids=1:17; name="All")
+function run_all(ids=1:19; name="All")
     if isa(ids,Integer) ids = ids:ids end
     @testset "$(name)" begin
         for i in ids
