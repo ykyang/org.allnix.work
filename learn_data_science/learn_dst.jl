@@ -247,10 +247,23 @@ function learn_dst_7()
         │     └─ Count
         └─ Unknown
         """
+    #
     ## Inspecting the scitype
-    boston = dataset("MASS", "Boston")
-    x = schema(boston)
-    #show(stdout,"text/plain", x)
+        boston = dataset("MASS", "Boston")
+        #first(boston,5)
+        """
+         Row │ Crim     Zn       Indus    Chas   NOx      Rm       Age      Dis      Rad    Tax    PTRatio  
+             │ Float64  Float64  Float64  Int64  Float64  Float64  Float64  Float64  Int64  Int64  Float64  
+        ─────┼──────────────────────────────────────────────────────────────────────────────────────────────
+           1 │ 0.00632     18.0     2.31      0    0.538    6.575     65.2   4.09        1    296     15.3  
+           2 │ 0.02731      0.0     7.07      0    0.469    6.421     78.9   4.9671      2    242     17.8  
+           3 │ 0.02729      0.0     7.07      0    0.469    7.185     61.1   4.9671      2    242     17.8  
+           4 │ 0.03237      0.0     2.18      0    0.458    6.998     45.8   6.0622      3    222     18.7  
+           5 │ 0.06905      0.0     2.18      0    0.458    7.147     54.2   6.0622      3    222     18.7  
+        """
+        #
+        x = schema(boston)
+        #show(stdout,"text/plain", x)
         """
         ┌─────────┬────────────┬─────────┐
         │ names   │ scitypes   │ types   │
@@ -271,11 +284,103 @@ function learn_dst_7()
         │ MedV    │ Continuous │ Float64 │
         └─────────┴────────────┴─────────┘    
         """
-    #end show
-
+        #
+        
+    #
     ## Changing the scitype
+        # inspect current scientific type
+        @test unique(boston.Chas) == [0,1]
+        @test scitype(boston.Chas) == AbstractVector{Count}
+        @test eltype(scitype(boston.Chas)) == Count
+        # change scientific type from count to categorical
+        boston2 = coerce(boston, :Chas => OrderedFactor)
+        @test unique(boston2.Chas)          == [0,1]
+        @test eltype(boston2.Chas)          == CategoricalArrays.CategoricalValue{Int64, UInt32}
+        @test scitype(boston2.Chas)         == AbstractVector{OrderedFactor{2}}
+        @test elscitype(boston2.Chas)       == OrderedFactor{2}
+        @test eltype(scitype(boston2.Chas)) == OrderedFactor{2}
+        # change scientific type from count to categorical        
+        boston3 = coerce(boston, "Chas"=>OrderedFactor, "Rad"=>OrderedFactor)
+        @test elscitype(boston3.Chas) == OrderedFactor{2}
+        @test elscitype(boston3.Rad)  == OrderedFactor{9}
+    #   
+    ## String and Unknown
+        feature = ["AA", "BB", "AA", "AA", "BB"]
+        @test elscitype(feature) == Textual
+        # change from textual to multi-class
+        feature2 = coerce(feature, Multiclass)
+        @test elscitype(feature2) == Multiclass{2}
+    #
+    let # Type to Type coercion
+        # Coerce columns of a data type to another
+        data = select(boston, [:Rad, :Tax])
+        #@show first(data,5)
+        """
+         Row │ Rad    Tax
+             │ Int64  Int64
+        ─────┼──────────────
+           1 │     1    296
+           2 │     2    242
+           3 │     2    242
+           4 │     3    222
+           5 │     3    222
+        """
+        #show(stdout, "text/plain", schema(data))
+        """
+        ┌───────┬──────────┬───────┐
+        │ names │ scitypes │ types │
+        ├───────┼──────────┼───────┤
+        │ Rad   │ Count    │ Int64 │
+        │ Tax   │ Count    │ Int64 │
+        └───────┴──────────┴───────┘
+        """
+        data2 = coerce(data, Count => Continuous)
+        #show(stdout, "text/plain", schema(data2))
+        """
+        ┌───────┬────────────┬─────────┐
+        │ names │ scitypes   │ types   │
+        ├───────┼────────────┼─────────┤
+        │ Rad   │ Continuous │ Float64 │
+        │ Tax   │ Continuous │ Float64 │
+        └───────┴────────────┴─────────┘
+        """
+    end
+    let # Autotype
+        #show(stdout, "text/plain", autotype(boston, :few_to_finite))
+        """
+        Dict{Symbol, Type} with 4 entries:
+          :Zn => OrderedFactor
+          :Rad => OrderedFactor
+          :Chas => OrderedFactor
+          :PTRatio => OrderedFactor
+        """
+        boston3 = coerce(boston, autotype(boston, :few_to_finite))
+        #show(stdout, "text/plain", schema(boston3))
+        """
+        ┌─────────┬───────────────────┬───────────────────────────────────┐
+        │ names   │ scitypes          │ types                             │
+        ├─────────┼───────────────────┼───────────────────────────────────┤
+        │ Crim    │ Continuous        │ Float64                           │
+        │ Zn      │ OrderedFactor{26} │ CategoricalValue{Float64, UInt32} │
+        │ Indus   │ Continuous        │ Float64                           │
+        │ Chas    │ OrderedFactor{2}  │ CategoricalValue{Int64, UInt32}   │
+        │ NOx     │ Continuous        │ Float64                           │
+        │ Rm      │ Continuous        │ Float64                           │
+        │ Age     │ Continuous        │ Float64                           │
+        │ Dis     │ Continuous        │ Float64                           │
+        │ Rad     │ OrderedFactor{9}  │ CategoricalValue{Int64, UInt32}   │
+        │ Tax     │ Count             │ Int64                             │
+        │ PTRatio │ OrderedFactor{46} │ CategoricalValue{Float64, UInt32} │
+        │ Black   │ Continuous        │ Float64                           │
+        │ LStat   │ Continuous        │ Float64                           │
+        │ MedV    │ Continuous        │ Float64                           │
+        └─────────┴───────────────────┴───────────────────────────────────┘        
+        """
+    end
 
-    #boston
+    #return boston
+    #return boston2
+    nothing
 end
 
 
