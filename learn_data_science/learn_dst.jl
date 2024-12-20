@@ -19,6 +19,9 @@ using CSV
 using StatsBase # describe,
 using CategoricalArrays # categorical
 using ScientificTypes   # schema
+using UrlDownload
+using Plots
+using Dates
 
 # Loading and elementary processing of data        https://juliaai.github.io/DataScienceTutorials.jl/data/loading/#loading_and_elementary_processing_of_data
 function learn_dst_1() # Using RDatasets
@@ -382,23 +385,308 @@ function learn_dst_7()
     #return boston2
     nothing
 end
+# Data Processing and Visualization        https://juliaai.github.io/DataScienceTutorials.jl/data/processing/#further_data_processing
+function learn_dst_8()
+    #import MLJ: schema, std, mean, median, coerce, coerce!, scitype
+    #using DataFrames
+    #using UrlDownload
+    #using Plots
 
+    raw_data = urldownload("https://github.com/tlienart/DataScienceTutorialsData.jl/blob/master/data/wri_global_power_plant_db_be_022020.csv?raw=true")
+    @test typeof(raw_data) == CSV.File
+    #@show raw_data
+        """
+        Size: 33643 x 25
+        Tables.Schema:
+         :country                   String3
+         :country_long              String
+         :name                      String
+         :gppd_idnr                 String15
+         :capacity_mw               Float64
+         :latitude                  Float64
+         :longitude                 Float64
+         :primary_fuel              String15
+         :other_fuel1               Union{Missing, String15}
+         :other_fuel2               Union{Missing, String7}
+         :other_fuel3               Union{Missing, String7}
+         :commissioning_year        Union{Missing, Float64}
+         :owner                     Union{Missing, String}
+         :source                    Union{Missing, String}
+         :url                       Union{Missing, String}
+         :geolocation_source        Union{Missing, String}
+         :wepp_id                   Union{Missing, String31}
+         :year_of_capacity_data     Union{Missing, Int64}
+         :generation_gwh_2013       Union{Missing, Float64}
+         :generation_gwh_2014       Union{Missing, Float64}
+         :generation_gwh_2015       Union{Missing, Float64}
+         :generation_gwh_2016       Union{Missing, Float64}
+         :generation_gwh_2017       Union{Missing, Float64}
+         :generation_data_source    Union{Missing, String}
+         :estimated_generation_gwh  Union{Missing, Float64}    
+        """
+    #
+    data = DataFrame(raw_data)
+    #show(stdout, "text/plain", schema(data))
+        """
+        ┌──────────────────────────┬────────────────────────────┬──────────────────────────┐
+        │ names                    │ scitypes                   │ types                    │
+        ├──────────────────────────┼────────────────────────────┼──────────────────────────┤
+        │ country                  │ Textual                    │ String3                  │
+        │ country_long             │ Textual                    │ String                   │
+        │ name                     │ Textual                    │ String                   │
+        │ gppd_idnr                │ Textual                    │ String15                 │
+        │ capacity_mw              │ Continuous                 │ Float64                  │
+        │ latitude                 │ Continuous                 │ Float64                  │
+        │ longitude                │ Continuous                 │ Float64                  │
+        │ primary_fuel             │ Textual                    │ String15                 │
+        │ other_fuel1              │ Union{Missing, Textual}    │ Union{Missing, String15} │
+        │ other_fuel2              │ Union{Missing, Textual}    │ Union{Missing, String7}  │
+        │ other_fuel3              │ Union{Missing, Textual}    │ Union{Missing, String7}  │
+        │ commissioning_year       │ Union{Missing, Continuous} │ Union{Missing, Float64}  │
+        │ owner                    │ Union{Missing, Textual}    │ Union{Missing, String}   │
+        │ source                   │ Union{Missing, Textual}    │ Union{Missing, String}   │
+        │ url                      │ Union{Missing, Textual}    │ Union{Missing, String}   │
+        │ geolocation_source       │ Union{Missing, Textual}    │ Union{Missing, String}   │
+        │ wepp_id                  │ Union{Missing, Textual}    │ Union{Missing, String31} │
+        │ year_of_capacity_data    │ Union{Missing, Count}      │ Union{Missing, Int64}    │
+        │ generation_gwh_2013      │ Union{Missing, Continuous} │ Union{Missing, Float64}  │
+        │ generation_gwh_2014      │ Union{Missing, Continuous} │ Union{Missing, Float64}  │
+        │ generation_gwh_2015      │ Union{Missing, Continuous} │ Union{Missing, Float64}  │
+        │ generation_gwh_2016      │ Union{Missing, Continuous} │ Union{Missing, Float64}  │
+        │ generation_gwh_2017      │ Union{Missing, Continuous} │ Union{Missing, Float64}  │
+        │ generation_data_source   │ Union{Missing, Textual}    │ Union{Missing, String}   │
+        │ estimated_generation_gwh │ Union{Missing, Continuous} │ Union{Missing, Float64}  │
+        └──────────────────────────┴────────────────────────────┴──────────────────────────┘    
+        """
+    #
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    # Remove columns
+    active_cols = [col for col in names(data) if !occursin(r"source|generation", col)]
+    select!(data, active_cols)
+    @test names(data) == ["country", "country_long", "name", "gppd_idnr", "capacity_mw", "latitude", "longitude", "primary_fuel", "other_fuel1", "other_fuel2", "other_fuel3", "commissioning_year", "owner", "url", "wepp_id", "year_of_capacity_data"]
+    select!(data, Not([:wepp_id, :url, :owner]))
+    @test names(data) == ["country", "country_long", "name", "gppd_idnr", "capacity_mw", "latitude", "longitude", "primary_fuel", "other_fuel1", "other_fuel2", "other_fuel3", "commissioning_year", "year_of_capacity_data"]
+    #show(stdout, "text/plain", schema(data))
+        """
+        ┌───────────────────────┬────────────────────────────┬──────────────────────────┐
+        │ names                 │ scitypes                   │ types                    │
+        ├───────────────────────┼────────────────────────────┼──────────────────────────┤
+        │ country               │ Textual                    │ String3                  │
+        │ country_long          │ Textual                    │ String                   │
+        │ name                  │ Textual                    │ String                   │
+        │ gppd_idnr             │ Textual                    │ String15                 │
+        │ capacity_mw           │ Continuous                 │ Float64                  │
+        │ latitude              │ Continuous                 │ Float64                  │
+        │ longitude             │ Continuous                 │ Float64                  │
+        │ primary_fuel          │ Textual                    │ String15                 │
+        │ other_fuel1           │ Union{Missing, Textual}    │ Union{Missing, String15} │
+        │ other_fuel2           │ Union{Missing, Textual}    │ Union{Missing, String7}  │
+        │ other_fuel3           │ Union{Missing, Textual}    │ Union{Missing, String7}  │
+        │ commissioning_year    │ Union{Missing, Continuous} │ Union{Missing, Float64}  │
+        │ year_of_capacity_data │ Union{Missing, Count}      │ Union{Missing, Int64}    │
+        └───────────────────────┴────────────────────────────┴──────────────────────────┘    
+        """
+    #
+    #show(stdout, "text/plain", describe(data))
+       """
+        Row │ variable               mean     min          median   max                nmissing  eltype
+            │ Symbol                 Union…   Any          Union…   Any                Int64     Type
+       ─────┼─────────────────────────────────────────────────────────────────────────────────────────────────────────────
+          1 │ country                         AFG                   ZWE                       0  String3
+          2 │ country_long                    Afghanistan           Zimbabwe                  0  String
+          3 │ name                            'Muela                \u200bVärtaverket         0  String
+          4 │ gppd_idnr                       ARG0000001            WRI1075863                0  String15
+          5 │ capacity_mw            168.993  1.0          18.3     22500.0                   0  Float64
+          6 │ latitude               32.5014  -77.847      39.5835  71.292                    0  Float64
+          7 │ longitude              -4.1955  -179.978     -1.2744  179.389                   0  Float64
+          8 │ primary_fuel                    Biomass               Wind                      0  String15
+          9 │ other_fuel1                     Biomass               Wind                  31680  Union{Missing, String15}
+         10 │ other_fuel2                     Biomass               Wind                  33340  Union{Missing, String7}
+         11 │ other_fuel3                     Biomass               Wind                  33539  Union{Missing, String7}
+         12 │ commissioning_year     1995.49  1896.0       2005.0   2018.0                17340  Union{Missing, Float64}
+         13 │ year_of_capacity_data  2016.86  2000         2017.0   2018                  19900  Union{Missing, Int64}       
+       """
+    #
+    capacity = select(data, [:country, :primary_fuel, :capacity_mw])
+    #show(stdout, "text/plain", first(capacity,5))
+        """
+           Row │ country  primary_fuel  capacity_mw
+               │ String3  String15      Float64
+        ───────┼────────────────────────────────────
+             1 │ AFG      Hydro              33.0
+             2 │ AFG      Solar              10.0
+             3 │ AFG      Solar              10.0
+             4 │ AFG      Hydro              66.0
+             5 │ AFG      Hydro             100.0        
+        """
+    #
+    cap_grp = groupby(capacity, [:country, :primary_fuel])
+    @test length(cap_grp) == 697 # number of groups
+    cap_mean = combine(cap_grp, :capacity_mw => mean)
+    #show(stdout, "text/plain", first(cap_mean,5))
+        """
+         Row │ country  primary_fuel  capacity_mw_mean
+             │ String3  String15      Float64
+        ─────┼─────────────────────────────────────────
+           1 │ AFG      Hydro                  39.7583
+           2 │ AFG      Solar                  10.0
+           3 │ AFG      Gas                    42.0
+           4 │ ALB      Hydro                 204.429
+           5 │ ALB      Other                  98.0        
+        """
+    # Capacity of (country,fuel)
+    cap_sum = combine(cap_grp, :capacity_mw => sum)
+    #show(stdout, "text/plain", first(cap_sum,5))
+        """
+         Row │ country  primary_fuel  capacity_mw_sum
+             │ String3  String15      Float64
+        ─────┼────────────────────────────────────────
+           1 │ AFG      Hydro                  238.55
+           2 │ AFG      Solar                   20.0
+           3 │ AFG      Gas                     42.0
+           4 │ ALB      Hydro                 1431.0
+           5 │ ALB      Other                   98.0        
+        """
+    #
+    #@show unique(capacity.country)
+    ctry_filter = occursin.(r"BEL|FRA|DEU", cap_sum.country)
+    #@show cap_sum[ctry_filter,1]
+    fuel_filter = occursin.(r"Solar", cap_sum.primary_fuel)
+    #@show cap_sum[fuel_filter,2]
+    df = cap_sum[ctry_filter .& fuel_filter, :]
+    #show(stdout, "text/plain", df)
+        """
+         Row │ country  primary_fuel  capacity_mw_sum
+             │ String3  String15      Float64
+        ─────┼────────────────────────────────────────
+           1 │ BEL      Solar                  116.2
+           2 │ FRA      Solar                 4910.42
+           3 │ DEU      Solar                 6770.56        
+        """
+    #
+    df = sort(df, :capacity_mw_sum; rev=true)
+    plt = Plots.bar(df.country, df.capacity_mw_sum; label="Solar")
+    ylabel!(plt, "MW")
+    #gui(plt)
+    # Capacity of (country)
+    cap_sum_ctry = combine(groupby(capacity, [:country]), :capacity_mw => sum => :capacity_mw_ctry)
+    #show(stdout, "text/plain", first(cap_sum_ctry,5))
+        """
+         Row │ country  capacity_mw_ctry
+             │ String3  Float64
+        ─────┼───────────────────────────
+           1 │ AFG                300.55
+           2 │ ALB               1529.0
+           3 │ DZA              15873.8
+           4 │ AGO               1071.18
+           5 │ ATA                  7.6
+        """
+    #
+    # join
+    cap_share = leftjoin(cap_sum, cap_sum_ctry; on=:country)
+    #show(stdout, "text/plain", first(cap_share,5))
+        """
+         Row │ country  primary_fuel  capacity_mw_sum  capacity_mw_ctry
+             │ String3  String15      Float64          Float64?
+        ─────┼──────────────────────────────────────────────────────────
+           1 │ AFG      Hydro                  238.55            300.55
+           2 │ AFG      Solar                   20.0             300.55
+           3 │ AFG      Gas                     42.0             300.55
+           4 │ ALB      Hydro                 1431.0            1529.0
+           5 │ ALB      Other                   98.0            1529.0        
+        """
+    #
+    cap_share.capacity_mw_share = cap_share.capacity_mw_sum ./ cap_share.capacity_mw_ctry
+    #show(stdout, "text/plain", first(cap_share,5))
+        """
+         Row │ country  primary_fuel  capacity_mw_sum  capacity_mw_ctry  capacity_mw_share
+             │ String3  String15      Float64          Float64?          Float64
+        ─────┼─────────────────────────────────────────────────────────────────────────────
+           1 │ AFG      Hydro                  238.55            300.55          0.793712
+           2 │ AFG      Solar                   20.0             300.55          0.0665447
+           3 │ AFG      Gas                     42.0             300.55          0.139744
+           4 │ ALB      Hydro                 1431.0            1529.0           0.935906
+           5 │ ALB      Other                   98.0            1529.0           0.0640942        
+        """
+    #
+    df = cap_share[ctry_filter .& fuel_filter, :]
+    df = sort(df, :capacity_mw_share, rev=true)
+    plt = Plots.bar(df.country, df.capacity_mw_share.*100; label="Solar")
+    ylabel!(plt, "%")
+    #gui(plt)
+    # Missing
+    no_missing = length(findall(ismissing, data.commissioning_year))
+    @test no_missing == 17340 # will change in the future
+    missing_share = no_missing/nrow(data)
+    @test isapprox(missing_share, 0.5154; atol=1e-4)
+    # Drop missing
+    data_nmissing = dropmissing(data, :commissioning_year)
+    # Round year to integer
+    map!(x->round(x,digits=0), data_nmissing.commissioning_year, data_nmissing.commissioning_year)
+    #show(stdout, "text/plain", data_nmissing[!,:commissioning_year])
+    # Calculate age
+    current_year = Vector{Float64}(undef,nrow(data_nmissing)) .= year(now())
+    data_nmissing[:, :plant_age] = current_year .- data_nmissing[!, :commissioning_year]
+    mean_age = mean(data_nmissing[!,:plant_age])
+    median_age = median(data_nmissing[!,:plant_age])
+    plt = histogram(data_nmissing.plant_age; label="Age")
+    vline!(plt, [mean_age]; linewidth=2, label="Mean")
+    vline!(plt, [median_age]; linewidth=2, color="orange", label="Median")
+    #gui(plt)
+    age = select(data_nmissing, [:country, :primary_fuel, :plant_age])
+    #show(stdout, "text/plain", first(age,5))
+       """
+        Row │ country  primary_fuel  plant_age
+            │ String3  String15      Float64
+       ─────┼──────────────────────────────────
+          1 │ ALB      Hydro              59.0
+          2 │ ALB      Hydro              46.0
+          3 │ ALB      Hydro              39.0
+          4 │ ALB      Hydro              73.0
+          5 │ ALB      Hydro              61.0
+       """
+    #
+    age_mean = combine(groupby(age, [:country, :primary_fuel]), :plant_age => mean)
+    #show(stdout, "text/plain", first(age_mean,5))
+        """
+         Row │ country  primary_fuel  plant_age_mean
+             │ String3  String15      Float64
+        ─────┼───────────────────────────────────────
+           1 │ ALB      Hydro                56.7143
+           2 │ DZA      Hydro                72.0
+           3 │ DZA      Gas                  20.15
+           4 │ ATA      Oil                  43.0
+           5 │ ARG      Hydro                48.5957        
+        """
+    #
+    ctry_filter = occursin.(r"BEL|FRA|DEU", age_mean.country)
+    fuel_filter = occursin.(r"Coal", age_mean.primary_fuel)
+    coal_means = age_mean[ctry_filter .& fuel_filter, :]
+    #show(stdout, "text/plain", coal_means)
+        """
+         Row │ country  primary_fuel  plant_age_mean
+             │ String3  String15      Float64
+        ─────┼───────────────────────────────────────
+           1 │ BEL      Coal                 56.0
+           2 │ DEU      Coal                 39.3933        
+        """
+    #
+    fuel_filter = occursin.(r"Gas", age_mean.primary_fuel)
+    gas_means = age_mean[ctry_filter .& fuel_filter, :]
+    #show(stdout, "text/plain", gas_means)
+        """
+         Row │ country  primary_fuel  plant_age_mean
+             │ String3  String15      Float64
+        ─────┼───────────────────────────────────────
+           1 │ BEL      Gas                  20.5
+           2 │ DEU      Gas                  29.6867        
+        """
+    #
+    plt1 = Plots.bar(coal_means[!,:country], coal_means[!,:plant_age_mean]; label="Coal")
+    plt2 = Plots.bar(gas_means[!,:country], gas_means[!,:plant_age_mean]; label="Gas")
+    plt = plot(plt1,plt2; layout=(1,2), size=(900,600), plot_title="Mean plant age")
+    #gui(plt)
+end
 
 """
     run_all(ids)
