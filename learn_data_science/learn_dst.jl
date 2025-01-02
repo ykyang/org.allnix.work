@@ -23,8 +23,12 @@ using UrlDownload
 using Plots
 using Dates
 using MLJ
+import Statistics
+using PrettyPrinting
+using StableRNGs
+import MLJDecisionTreeInterface
 
-# Loading and elementary processing of data        https://juliaai.github.io/DataScienceTutorials.jl/data/loading/#loading_and_elementary_processing_of_data
+# Loading and Accessing Data        https://juliaai.github.io/DataScienceTutorials.jl/data/loading/#loading_and_elementary_processing_of_data
 function learn_dst_1() # Using RDatasets
     @info "learn_dst_1()"
     ## https://juliaai.github.io/DataScienceTutorials.jl/data/loading/#using_rdatasets
@@ -134,7 +138,7 @@ function learn_dst_4() # Using CSV, Example 2
 
     return data
 end
-# Manipulating a DataFrame        https://juliaai.github.io/DataScienceTutorials.jl/data/dataframe/#manipulating_a_dataframe
+# Manipulating Data Frames        https://juliaai.github.io/DataScienceTutorials.jl/data/dataframe/#manipulating_a_dataframe
 function learn_dst_5()
     @info "learn_dst_5()"
 
@@ -206,7 +210,7 @@ function learn_dst_5()
 
     return (boston,mao,iris)
 end
-# Handling categorical data        https://juliaai.github.io/DataScienceTutorials.jl/data/categorical/#handling_categorical_data
+# Working with Categorical Data        https://juliaai.github.io/DataScienceTutorials.jl/data/categorical/#handling_categorical_data
 function learn_dst_6() 
     @info "learn_dst_6()"
 
@@ -234,7 +238,7 @@ function learn_dst_6()
     @test levels(v) == ["AA", "BB", "CC"]
     
 end
-# Scientific Types        https://juliaai.github.io/DataScienceTutorials.jl/data/scitype/#data_interpretation_scientific_types
+# Understanding Scientific Types        https://juliaai.github.io/DataScienceTutorials.jl/data/scitype/#data_interpretation_scientific_types
 function learn_dst_7()
     @info "learn_dst_7()"
 
@@ -704,27 +708,280 @@ function learn_dst_8()
     plt = plot(plt1,plt2; layout=(1,2), size=(900,600), plot_title="Mean plant age")
     #gui(plt)
 end
-# Choosing and evaluating a model        https://juliaai.github.io/DataScienceTutorials.jl/getting-started/choosing-a-model/
+# Preparing data and model with iris        https://juliaai.github.io/DataScienceTutorials.jl/getting-started/choosing-a-model/
 function learn_dst_9()
-    ## Machine type and scientific type
     #using RDatasets
     #using MLJ
+
+    iris = let # Machine type and scientific type
+        iris = dataset("datasets", "iris"); @test iris isa DataFrame
+        #first(iris, 3) |> pretty # pretty from MLJBase
+            """
+            ┌─────────────┬────────────┬─────────────┬────────────┬─────────────────────────────────┐
+            │ SepalLength │ SepalWidth │ PetalLength │ PetalWidth │ Species                         │
+            │ Float64     │ Float64    │ Float64     │ Float64    │ CategoricalValue{String, UInt8} │
+            │ Continuous  │ Continuous │ Continuous  │ Continuous │ Multiclass{3}                   │
+            ├─────────────┼────────────┼─────────────┼────────────┼─────────────────────────────────┤
+            │ 5.1         │ 3.5        │ 1.4         │ 0.2        │ setosa                          │
+            │ 4.9         │ 3.0        │ 1.4         │ 0.2        │ setosa                          │
+            │ 4.7         │ 3.2        │ 1.3         │ 0.2        │ setosa                          │
+            └─────────────┴────────────┴─────────────┴────────────┴─────────────────────────────────┘
+            """
+        #
+        iris
+    end
+    let # Unpacking data
+        y,X = unpack(iris, ==(:Species))
+            @test y isa CategoricalVector; @test y isa AbstractArray;
+            @test first(y,3) == ["setosa", "setosa", "setosa"]
+            #first(X,3) |> pretty
+            """
+            ┌─────────────┬────────────┬─────────────┬────────────┐
+            │ SepalLength │ SepalWidth │ PetalLength │ PetalWidth │
+            │ Float64     │ Float64    │ Float64     │ Float64    │
+            │ Continuous  │ Continuous │ Continuous  │ Continuous │
+            ├─────────────┼────────────┼─────────────┼────────────┤
+            │ 5.1         │ 3.5        │ 1.4         │ 0.2        │
+            │ 4.9         │ 3.0        │ 1.4         │ 0.2        │
+            │ 4.7         │ 3.2        │ 1.3         │ 0.2        │
+            └─────────────┴────────────┴─────────────┴────────────┘
+            """
+        #
+        for m in models(matching(X,y))
+            if m.prediction_type == :probabilistic
+                #println(rpad(m.name,30), "($(m.package_name))")
+                """
+                AdaBoostClassifier            (MLJScikitLearnInterface)
+                AdaBoostStumpClassifier       (DecisionTree)
+                BaggingClassifier             (MLJScikitLearnInterface)
+                BayesianLDA                   (MLJScikitLearnInterface)
+                BayesianLDA                   (MultivariateStats)
+                BayesianQDA                   (MLJScikitLearnInterface)
+                BayesianSubspaceLDA           (MultivariateStats)
+                CatBoostClassifier            (CatBoost)
+                ConstantClassifier            (MLJModels)
+                DecisionTreeClassifier        (BetaML)
+                DecisionTreeClassifier        (DecisionTree)
+                DummyClassifier               (MLJScikitLearnInterface)
+                EvoTreeClassifier             (EvoTrees)
+                ExtraTreesClassifier          (MLJScikitLearnInterface)
+                GaussianNBClassifier          (MLJScikitLearnInterface)
+                GaussianNBClassifier          (NaiveBayes)
+                GaussianProcessClassifier     (MLJScikitLearnInterface)
+                GradientBoostingClassifier    (MLJScikitLearnInterface)
+                HistGradientBoostingClassifier(MLJScikitLearnInterface)
+                KNNClassifier                 (NearestNeighborModels)
+                KNeighborsClassifier          (MLJScikitLearnInterface)
+                KernelPerceptronClassifier    (BetaML)
+                LDA                           (MultivariateStats)
+                LGBMClassifier                (LightGBM)
+                LogisticCVClassifier          (MLJScikitLearnInterface)
+                LogisticClassifier            (MLJLinearModels)
+                LogisticClassifier            (MLJScikitLearnInterface)
+                MultinomialClassifier         (MLJLinearModels)
+                NeuralNetworkClassifier       (BetaML)
+                NeuralNetworkClassifier       (MLJFlux)
+                PegasosClassifier             (BetaML)
+                PerceptronClassifier          (BetaML)
+                ProbabilisticNuSVC            (LIBSVM)
+                ProbabilisticSGDClassifier    (MLJScikitLearnInterface)
+                ProbabilisticSVC              (LIBSVM)
+                RandomForestClassifier        (BetaML)
+                RandomForestClassifier        (DecisionTree)
+                RandomForestClassifier        (MLJScikitLearnInterface)
+                StableForestClassifier        (SIRUS)
+                StableRulesClassifier         (SIRUS)
+                SubspaceLDA                   (MultivariateStats)
+                XGBoostClassifier             (XGBoost)                
+                """
+            end
+        end
+    end
+    let # Choosing a model
+        # A model is a struct storing the hyperparameters of the learning
+        # algorithm indicated by the struct name
+        X,y = @load_iris; # MLJBase\7nGJF\src\data\datasets.jl:231
+            @test X isa NamedTuple
+            @test keys(X) == (:sepal_length, :sepal_width, :petal_length, :petal_width)
+            @test y isa CategoricalVector; @test y isa AbstractArray;
+            @test first(y,3) == ["setosa", "setosa", "setosa"]
+        #
+        for m in models(matching(X,y))
+            if m.prediction_type == :probabilistic
+                #println(rpad(m.name,30), "($(m.package_name))")
+                """
+                AdaBoostClassifier            (MLJScikitLearnInterface)
+                AdaBoostStumpClassifier       (DecisionTree)
+                BaggingClassifier             (MLJScikitLearnInterface)
+                BayesianLDA                   (MLJScikitLearnInterface)
+                BayesianLDA                   (MultivariateStats)
+                BayesianQDA                   (MLJScikitLearnInterface)
+                BayesianSubspaceLDA           (MultivariateStats)
+                CatBoostClassifier            (CatBoost)
+                ConstantClassifier            (MLJModels)
+                DecisionTreeClassifier        (BetaML)
+                DecisionTreeClassifier        (DecisionTree)
+                DummyClassifier               (MLJScikitLearnInterface)
+                EvoTreeClassifier             (EvoTrees)
+                ExtraTreesClassifier          (MLJScikitLearnInterface)
+                GaussianNBClassifier          (MLJScikitLearnInterface)
+                GaussianNBClassifier          (NaiveBayes)
+                GaussianProcessClassifier     (MLJScikitLearnInterface)
+                GradientBoostingClassifier    (MLJScikitLearnInterface)
+                HistGradientBoostingClassifier(MLJScikitLearnInterface)
+                KNNClassifier                 (NearestNeighborModels)
+                KNeighborsClassifier          (MLJScikitLearnInterface)
+                KernelPerceptronClassifier    (BetaML)
+                LDA                           (MultivariateStats)
+                LGBMClassifier                (LightGBM)
+                LogisticCVClassifier          (MLJScikitLearnInterface)
+                LogisticClassifier            (MLJLinearModels)
+                LogisticClassifier            (MLJScikitLearnInterface)
+                MultinomialClassifier         (MLJLinearModels)
+                NeuralNetworkClassifier       (BetaML)
+                NeuralNetworkClassifier       (MLJFlux)
+                PegasosClassifier             (BetaML)
+                PerceptronClassifier          (BetaML)
+                ProbabilisticNuSVC            (LIBSVM)
+                ProbabilisticSGDClassifier    (MLJScikitLearnInterface)
+                ProbabilisticSVC              (LIBSVM)
+                RandomForestClassifier        (BetaML)
+                RandomForestClassifier        (DecisionTree)
+                RandomForestClassifier        (MLJScikitLearnInterface)
+                StableForestClassifier        (SIRUS)
+                StableRulesClassifier         (SIRUS)
+                SubspaceLDA                   (MultivariateStats)
+                XGBoostClassifier             (XGBoost)                
+                """
+            end
+        end
+    end
+    let # Loading a model
+        #knc = @load KNeighborsClassifier
+        #linreg = @load LinearRegressor pkg=GLM
+    end
+end
+# Supervised and Unsupervised Workflows in MLJ        https://juliaai.github.io/DataScienceTutorials.jl/getting-started/fit-and-predict/
+function learn_dst_10()
+    #using MLJ
+    #import Statistics
+    #using PrettyPrinting
+    #using StableRNGs
+
+    tree_model, X, y = let # Data
+        X,y = @load_iris; # see learn_dst_9() for details
+        DecisionTreeClassifier = @load DecisionTreeClassifier pkg=DecisionTree #verbosity=0
+        tree_model = DecisionTreeClassifier()
+        #show(stdout, "text/plain", tree_model)
+            """
+            DecisionTreeClassifier(
+              max_depth = -1,
+              min_samples_leaf = 1,
+              min_samples_split = 2,
+              min_purity_increase = 0.0,
+              n_subfeatures = 0,
+              post_prune = false,
+              merge_purity_threshold = 1.0,
+              display_depth = 5,
+              feature_importance = :impurity,
+              rng = Random._GLOBAL_RNG())
+            """
+        #
+        tree_model, X, y
+    end 
     
-    iris = dataset("datasets", "iris"); @test iris isa DataFrame
-    first(iris, 3) |> pretty # pretty from MLJBase
-        """
-        ┌─────────────┬────────────┬─────────────┬────────────┬─────────────────────────────────┐
-        │ SepalLength │ SepalWidth │ PetalLength │ PetalWidth │ Species                         │
-        │ Float64     │ Float64    │ Float64     │ Float64    │ CategoricalValue{String, UInt8} │
-        │ Continuous  │ Continuous │ Continuous  │ Continuous │ Multiclass{3}                   │
-        ├─────────────┼────────────┼─────────────┼────────────┼─────────────────────────────────┤
-        │ 5.1         │ 3.5        │ 1.4         │ 0.2        │ setosa                          │
-        │ 4.9         │ 3.0        │ 1.4         │ 0.2        │ setosa                          │
-        │ 4.7         │ 3.2        │ 1.3         │ 0.2        │ setosa                          │
-        └─────────────┴────────────┴─────────────┴────────────┴─────────────────────────────────┘
-        """
-    #
-    iris
+    tree = let # MLJ Machine
+        tree = machine(tree_model, X, y)
+        #show(stdout, "text/plain", tree)
+            """
+            untrained Machine; caches model-specific representations of data
+              model: DecisionTreeClassifier(max_depth = -1, …)
+              args:
+                1:  Source @459 ⏎ Table{AbstractVector{Continuous}}
+                2:  Source @602 ⏎ AbstractVector{Multiclass{3}}            
+            """
+        #
+        tree
+    end
+    # Training and testing a supervised model
+    train, test = let # Splitting the data
+        rng = StableRNG(566)
+        train, test = partition(eachindex(y), 0.7; rng=rng)
+        @test test[1:3] == [39,54,9]
+
+        train, test
+    end
+    let # Fitting and testing the machine
+        fit!(tree; rows=train)
+        #show(stdout, "text/plain", tree)
+            """
+            trained Machine; caches model-specific representations of data
+              model: DecisionTreeClassifier(max_depth = -1, …)
+              args:
+                1:  Source @844 ⏎ Table{AbstractVector{Continuous}}
+                2:  Source @321 ⏎ AbstractVector{Multiclass{3}}            
+            """
+        #
+        #fitted_params(tree) |> pprint
+            """
+            (tree =
+                 DecisionTree.InfoNode{Float64, UInt32}(Decision Tree
+            Leaves: 5
+            Depth:  4, nchildren=2),
+             raw_tree = Decision Tree
+            Leaves: 5
+            Depth:  4,
+             encoding =
+                 Dict(0x00000002 => CategoricalArrays.CategoricalValue{String, UInt32} "versicolor",
+                      0x00000003 => CategoricalArrays.CategoricalValue{String, UInt32} "virginica",
+                      0x00000001 => CategoricalArrays.CategoricalValue{String, UInt32} "setosa"),
+             features = [:sepal_length, :sepal_width, :petal_length, :petal_width])            
+            """
+        #
+        y_hat = MLJ.predict(tree; rows=test)
+        y_bar = MLJ.predict_mode(tree; rows=test)
+        #@show y_hat[1]       # UnivariateFinite{ScientificTypesBase.Multiclass{3}}(setosa=>1.0, versicolor=>0.0, virginica=>0.0)
+        #@show mode(y_hat[1]) # CategoricalArrays.CategoricalValue{String, UInt32} "setosa"
+        #@show y_bar[1]       # CategoricalArrays.CategoricalValue{String, UInt32} "setosa"
+        #@show y[test[1]]     # CategoricalArrays.CategoricalValue{String, UInt32} "setosa"
+
+        # Need to learn cross entropy
+        mce = cross_entropy(y_hat, y[test])
+        #@show mce # 2.4029102259411435
+    end
+    let # Unsupervised models
+        v = [1,2,3,4]
+        stand_model = UnivariateStandardizer()
+        stand = machine(stand_model, v)
+        #show(stdout, "text/plain", stand)
+            """
+            untrained Machine; caches model-specific representations of data
+              model: UnivariateStandardizer()
+              args:
+                1:  Source @648 ⏎ AbstractVector{ScientificTypesBase.Count}            
+            """
+        #
+        fit!(stand)
+        #show(stdout, "text/plain", stand)
+            """
+            trained Machine; caches model-specific representations of data
+              model: UnivariateStandardizer()
+              args:
+                1:  Source @938 ⏎ AbstractVector{ScientificTypesBase.Count}            
+            """
+        #
+        w = MLJ.transform(stand, v)
+        #@show round.(w, digits=2) # [-1.16, -0.39, 0.39, 1.16]
+        #@@show mean(w) # 0.0
+        #@@show std(w)  # 1.0
+        vv = MLJ.inverse_transform(stand, w)
+        #@show vv # [1.0, 2.0, 3.0, 4.0]
+        #sum(abs.(vv .- v)) # 0.0
+    end
+
+end
+# Hyperparameter Tuning for Single and Composite Models        https://juliaai.github.io/DataScienceTutorials.jl/getting-started/model-tuning/
+function learn_dst_11()
 end
 
 """
