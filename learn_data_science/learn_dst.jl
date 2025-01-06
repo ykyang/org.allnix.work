@@ -982,6 +982,130 @@ function learn_dst_10()
 end
 # Hyperparameter Tuning for Single and Composite Models        https://juliaai.github.io/DataScienceTutorials.jl/getting-started/model-tuning/
 function learn_dst_11()
+    tm,X,y,dtc,r = let # Tuning a single hyperparameter
+        X,y = @load_iris
+        DTC = @load DecisionTreeClassifier pkg=DecisionTree
+        dtc = DTC()
+        r = MLJ.range(dtc, :max_depth; lower=1, upper=5) # sampling range for dtc.max_depth
+        #show(stdout, "text/plain", r)
+           """NumericRange(1 ≤ max_depth ≤ 5; origin=3.0, unit=2.0)""" # MLJBase
+        #
+        tm = TunedModel(model=dtc, ranges=[r,], measure=cross_entropy)
+        #show(stdout, "text/plain", tm)
+            """
+            ProbabilisticTunedModel(
+              model = DecisionTreeClassifier(
+                    max_depth = -1,
+                    min_samples_leaf = 1,
+                    min_samples_split = 2,
+                    min_purity_increase = 0.0,
+                    n_subfeatures = 0,
+                    post_prune = false,
+                    merge_purity_threshold = 1.0,
+                    display_depth = 5,
+                    feature_importance = :impurity,
+                    rng = Random._GLOBAL_RNG()),
+              tuning = RandomSearch(
+                    bounded = Distributions.Uniform,
+                    positive_unbounded = Distributions.Gamma,
+                    other = Distributions.Normal,
+                    rng = Random._GLOBAL_RNG()),
+              resampling = Holdout(
+                    fraction_train = 0.7,
+                    shuffle = false,
+                    rng = Random._GLOBAL_RNG()),
+              measure = LogLoss(tol = 2.22045e-16),
+              weights = nothing,
+              class_weights = nothing,
+              operation = nothing,
+              range = MLJBase.NumericRange{Int64, MLJBase.Bounded, Symbol}[NumericRange(1 ≤ max_depth ≤ 5; origin=3.0, unit=2.0)],
+              selection_heuristic = MLJTuning.NaiveSelection(nothing),
+              train_best = true,
+              repeats = 1,
+              n = nothing,
+              acceleration = CPU1{Nothing}(nothing),
+              acceleration_resampling = CPU1{Nothing}(nothing),
+              check_measure = true,
+              cache = true,
+              compact_history = true,
+              logger = nothing)            
+            """
+        #
+
+        tm,X,y,dtc,r
+    end
+    let # Fitting and inspecting a tuned model
+        m = machine(tm, X, y)
+        fit!(m)
+        #show(stdout, "text/plain", m)
+            """
+            trained Machine; does not cache data
+              model: ProbabilisticTunedModel(model = DecisionTreeClassifier(max_depth = -1, …), …)
+              args:
+                1:  Source @018 ⏎ Table{AbstractVector{Continuous}}
+                2:  Source @539 ⏎ AbstractVector{Multiclass{3}}            
+            """
+        #
+        #show(stdout, "text/plain", fitted_params(m).best_model)
+            """
+            DecisionTreeClassifier(
+              max_depth = 1,
+              min_samples_leaf = 1,
+              min_samples_split = 2,
+              min_purity_increase = 0.0,
+              n_subfeatures = 0,
+              post_prune = false,
+              merge_purity_threshold = 1.0,
+              display_depth = 5,
+              feature_importance = :impurity,
+              rng = Random._GLOBAL_RNG())            
+            """
+        #
+        #@show misclassification_rate # misclassification_rate = MisclassificationRate()
+        tm2 = TunedModel(model=dtc, ranges=r, operation=predict_mode, measure=misclassification_rate)
+        m = machine(tm2, X, y)
+        fit!(m)
+        #show(stdout, "text/plain", fitted_params(m).best_model)
+            """
+            DecisionTreeClassifier(
+              max_depth = 2,
+              min_samples_leaf = 1,
+              min_samples_split = 2,
+              min_purity_increase = 0.0,
+              n_subfeatures = 0,
+              post_prune = false,
+              merge_purity_threshold = 1.0,
+              display_depth = 5,
+              feature_importance = :impurity,
+              rng = Random._GLOBAL_RNG())            
+            """
+        #
+        rep = report(m)
+        #show(stdout, "text/plain", rep.best_history_entry)
+            """
+            (model = DecisionTreeClassifier(max_depth = 2, …),
+             measure = StatisticalMeasuresBase.RobustMeasure{StatisticalMeasuresBase.FussyMeasure{StatisticalMeasuresBase.RobustMeasure{StatisticalMeasuresBase.Multimeasure{StatisticalMeasuresBase.SupportsMissingsMeasure{StatisticalMeasures.MisclassificationRateOnScalars}, Nothing, StatisticalMeasuresBase.Mean, typeof(identity)}}, Nothing}}[MisclassificationRate()],
+             measurement = [0.1111111111111111],
+             per_fold = [[0.1111111111111111]],
+             evaluation = CompactPerformanceEvaluation(0.111,),)            
+            """
+        #
+        #show(stdout, "text/plain", m)
+        #plot(m, size(800,600)) # does not work
+        #m.report[:fit] |> pprint
+        #show(stdout, "text/plain", rep.plotting)
+            """
+            (parameter_names = ["max_depth"],
+             parameter_scales = [:linear],
+             parameter_values = Any[5; 2; … ; 4; 4;;],
+             measurements = [0.26666666666666666, 0.1111111111111111, 0.1111111111111111, 0.1111111111111111, 0.2222222222222222, 0.2222222222222222, 0.2222222222222222, 0.1111111111111111, 0.26666666666666666, 0.26666666666666666],)            
+            """
+        #
+        plt = plot(vec(rep.plotting.parameter_values), rep.plotting.measurements; seriestype=:scatter)
+        ylabel!(plt, "MisclassificationRate()")
+        xlabel!(plt, "max_depth")
+        #gui(plt)
+    end
 end
 
 """
