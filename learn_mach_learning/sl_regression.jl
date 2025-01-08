@@ -1,6 +1,7 @@
 # https://www.youtube.com/watch?v=n03pSsA7NtQ&list=PLhQ2JMBcfAsi76O13sJzk4LXA_mu5sd9E&index=2&t=146s
 using CSV, GLM, Plots, TypedTables
 
+# https://raw.githubusercontent.com/julia4ta/tutorials/master/Series%2005/Files/housingdata.csv
 data = CSV.File("housingdata.csv")
 
 X = data.size
