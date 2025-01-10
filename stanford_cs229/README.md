@@ -68,17 +68,17 @@ $$
 # m >> n
 # θ[n], x[m,n], y[m]
 for j in 1:n # parameters
-    θ[j] = θ[j] + ⍺ * sum(y .- h.(x[i,:])) * x[:,j]
-    θ[j] = θ[j] + ⍺ * sum(y .- θ * )) * x[:,j]
-end
-h(xi) = θ .* xi
-for j in 1:n # parameters
     s = 0.0
     for i in 1:m # examples
-        s += (y[i] - θ .* x[i,:])*x[i,j]
+        s += (y[i] - x[i:i,:]*θ)*x[i,j]
     end
     θ[j] = θ[j] + ⍺ * s
 end
+
+h = x * θ
+#   n   1  nxm    m   m
+θ = θ + ⍺ * x' * (y - h)
+
 
 ```
 
