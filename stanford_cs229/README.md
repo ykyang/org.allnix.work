@@ -1,17 +1,17 @@
+# My CS229
 
-
-* [Stanford CS229 on YouTube](https://www.youtube.com/playlist?list=PLoROMvodv4rMiGQp3WXShtMGgzqpfVfbU)
-* [Material on Github](https://github.com/maxim5/cs229-2018-autumn)
-
-
-[Python Tutorial](./cs229-2018-autumn/section/cs229_python_tutorial/cs229_python_friday.pdf)
+> [Syllabus](./cs229-2018-autumn/syllabus-autumn2018.html)  
+> [Stanford CS229 on YouTube](https://youtube.com/playlist?list=PLoROMvodv4rMiGQp3WXShtMGgzqpfVfbU&si=kS07gMKIi_NB2Rlm)  
+> [Handouts on Github](https://github.com/maxim5/cs229-2018-autumn)  
+> [Python Tutorial](./cs229-2018-autumn/section/cs229_python_tutorial/cs229_python_friday.pdf)  
+> [ml-yearning book](https://github.com/yennlh/ml-yearning)  
 
 
 ☐ [Note 1](./cs229-2018-autumn/notes/cs229-notes1.pdf)
 
 ☑ [Lecture 1](https://www.youtube.com/watch?v=jGwO_UgTS7I&list=PLoROMvodv4rMiGQp3WXShtMGgzqpfVfbU&index=1&t=1279s)
 
-☐ [Problem Set 0](./cs229-2018-autumn/problem-sets/PS0/ps0.pdf)
+☐ [Problem Set 0](./cs229-2018-autumn/problem-sets/PS0/ps0.pdf), due on Lecture 4?
 
 ☑ [Lecture 2](https://www.youtube.com/watch?v=4b4MUYve_U8&list=PLoROMvodv4rMiGQp3WXShtMGgzqpfVfbU&index=2)
 
@@ -21,24 +21,53 @@
 
 Lecture 4
 
-☐ [Problem Set 1](./cs229-2018-autumn/problem-sets/PS1/ps1.pdf)
+☐ [Problem Set 1](./cs229-2018-autumn/problem-sets/PS1/ps1.pdf), due on Lecture 8
 
 
+
+> [Note 1](./cs229-2018-autumn/notes/cs229-notes1.pdf)  
+> [Lecture 1](https://youtu.be/jGwO_UgTS7I?si=WSwUyA5wdGubuhKr)  
+> [ml-yearning book](https://github.com/yennlh/ml-yearning)  
+
+
+
+# [Lecture 1](https://youtu.be/jGwO_UgTS7I?si=WSwUyA5wdGubuhKr)
+* 2018-09-24
+* `https://youtu.be/jGwO_UgTS7I?si=WSwUyA5wdGubuhKr`
+* Lecture starts at 36:20 
+
+
+# [Note 1](./cs229-2018-autumn/notes/cs229-notes1.pdf)
+* `cs229-2018-autumn/notes/cs229-notes1.pdf`
+* Supervised learning
+
+---
+
+CS229a is more applied (on Coursera?)  
+CS229 most mathematical   
+CS230 deep learning  
+
+# Supervised Learning
+* [Note 1](./cs229-2018-autumn/notes/cs229-notes1.pdf), p. 1
+
+See the `housing price` example in the note.  
+
+Training set, $\{(x^{(i)}, y^{(i)}); i = 1, \ldots, m\}$  
+$x$, input  
+$y$, output  
+$i$, $i^\text{th}$ pair  
+
+The hypothesis, $h: \mathcal{X} \mapsto \mathcal{Y}$  
+
+continuous, regression problem  
+discrete,   classification problem  
 
 
 # Linear Regression
 
-* `cs229-notes1.pdf`
-* [Lecture 1](https://www.youtube.com/watch?v=jGwO_UgTS7I&list=PLoROMvodv4rMiGQp3WXShtMGgzqpfVfbU&index=1&t=1279s)
-* [ml-yearning book](https://github.com/yennlh/ml-yearning)
+
 
 ```default
-CS229a is more applied (on Coursera?)
-CS229 most mathematical 
-CS230 deep learning
-
-Lecture starts at 36:20
-
 Supervised Learning
 h: X -> Y
 h is hypothesis
@@ -53,7 +82,7 @@ Unsupervised learning
 Reinforcement learning
 ```
 
-☑ [Lecture 2](https://www.youtube.com/watch?v=4b4MUYve_U8&list=PLoROMvodv4rMiGQp3WXShtMGgzqpfVfbU&index=2)
+# [Lecture 2](https://youtu.be/4b4MUYve_U8?si=fWcooAh8yaYWXHPA)
 
 * Training Set -> Learning Algorithm -> Hypothesis, h(x)
 * How to represent $h(x)$?
@@ -173,28 +202,42 @@ end
   * Amount of data/parameters need to keep grows linearly with the size of the data
 
 
-21:56
+
+
 
 ## Probabilistic interpretation
-[Lecture 3](https://www.youtube.com/watch?v=het9HFqo1TQ&list=PLoROMvodv4rMiGQp3WXShtMGgzqpfVfbU&index=3)
-
-Time: 21:56
-
+* [Lecture 3](https://youtu.be/het9HFqo1TQ?si=sUg0Q37jlcdvrjyN), Time: 21:56
 * Why least square error?
+* Normal distribution in terms of $\theta$, Time: 29:15
+* Central limit theorem, Time: 35:56
+* Maximum likelihood estimation, Time: 41:03
 
-22:35
 
 
 
 # Classification and logistic regression
+* [Lecture 3](https://youtu.be/het9HFqo1TQ?si=sUg0Q37jlcdvrjyN), Time: 43:36
+Time: 45:58
+
 
 ## Logistic regression
+* [Lecture 3](https://youtu.be/het9HFqo1TQ?si=sUg0Q37jlcdvrjyN), Time: 46:35
+* Want $h_\theta(x) \in [0,1]$
+* Batch gradient descent, Time: 1:02:09
+
+$$
+\theta_j := \theta_j + \alpha \sum_{i=1}^m (y^{(i)} - h_\theta(x^{(i)})) x_j^{(i)}
+$$
+
+## Another algorithm for maximizing $l(\theta)$
+* [Lecture 3](https://youtu.be/het9HFqo1TQ?si=sUg0Q37jlcdvrjyN)
+* Newton's method, 1:05:31
+
 
 ## Digression: The perceptron learning algorithm
 
-## Another algorithm for maximizing $l(\theta)$
-
 # Generalized Linear Models
+* [Lecture 4](https://youtu.be/iZTeva0WSTQ?si=adSzsWr66pQLrJa0)
 
 ## The exponential family
 
