@@ -47,66 +47,124 @@ CS229a is more applied (on Coursera?)
 CS229 most mathematical   
 CS230 deep learning  
 
+
 # Supervised Learning
+* [Lecture 1@39:34](https://youtu.be/jGwO_UgTS7I?si=aOaDLuqM2u4Sp_Dj&t=2374)
 * [Note 1](./cs229-2018-autumn/notes/cs229-notes1.pdf), p. 1
 
 See the `housing price` example in the note.  
 
 Training set, $\{(x^{(i)}, y^{(i)}); i = 1, \ldots, m\}$  
-$x$, input  
-$y$, output  
-$i$, $i^\text{th}$ pair  
+Input,  $x$  
+Output, $y$   
+A hypothesis, $h: \mathcal{X} \mapsto \mathcal{Y}$  
 
-The hypothesis, $h: \mathcal{X} \mapsto \mathcal{Y}$  
+Continuous, regression problem  
+Discrete,   classification problem  
 
-continuous, regression problem  
-discrete,   classification problem  
-
-
-# Linear Regression
-
-
-
-```default
-Supervised Learning
-h: X -> Y
-h is hypothesis
-continuous, regression problem
-discrete,   classification problem
-
-5 topics
-Supervised learning
-Machine learning strategy
-Deep learning
-Unsupervised learning
-Reinforcement learning
-```
+**5 topics**
+* Supervised learning, [Lecture 1@39:34](https://youtu.be/jGwO_UgTS7I?si=aOaDLuqM2u4Sp_Dj&t=2374)
+* Machine learning strategy, [Lecture 1@58:19](https://youtu.be/jGwO_UgTS7I?si=Zp7HmdCk4g7Ul6Pd&t=3499)
+* Deep learning, [Lecture 1@1:04:06](https://youtu.be/jGwO_UgTS7I?si=MiGzHLya5JawEoyb&t=3846)
+* Unsupervised learning, [Lecture 1@1:04:55](https://youtu.be/jGwO_UgTS7I?si=KzVPsuc5X0GrUjk7&t=3895)
+* Reinforcement learning, [Lecture 1@1:11:18](https://youtu.be/jGwO_UgTS7I?si=7al9kavU1hUy5g9I&t=4278)
 
 # [Lecture 2](https://youtu.be/4b4MUYve_U8?si=fWcooAh8yaYWXHPA)
+* 2018-09-26
 
-* Training Set -> Learning Algorithm -> Hypothesis, h(x)
-* How to represent $h(x)$?
-* Linear regression, $h(x) = θ_0 + θ_1 \cdot x$
-* x1 = size, x2 = No. of bedrooms
-* $\theta$: parameters
-* $m$: No. of training examples, index $i$
-* $x$: inputs/features, size(x) = (m,n)
-* $y$: outputs/target variables, size(y) = m
-* $(x,y)$: training example
-* $(x^{(i)},y^{(i)})$: $i^\text{th}$ training example
-* $\theta_j$, $j^\text{th}$ parameter
-* $n$: No. of features, index $j$
-* Learning algorithm choose parameters, $\theta$, for the hypothesis, $h(x)$.
-* Cost function
+# Supervised Learning
+* [Lecture 2@3:01](https://youtu.be/4b4MUYve_U8?si=RrWTO1ZCVGdTQ4VC&t=181)
+* [Note 1](./cs229-2018-autumn/notes/cs229-notes1.pdf), p. 1
+
+[Lecture 2@2:39](https://youtu.be/4b4MUYve_U8?si=x9f1zW1no4TAYxAl&t=159)  
+[Note 1](./cs229-2018-autumn/notes/cs229-notes1.pdf), p. 1  
+Example  
+
+[Lecture 2@3:12](https://youtu.be/4b4MUYve_U8?si=muE-BHqu9gcAF3Qo&t=192)  
+[Note 1](./cs229-2018-autumn/notes/cs229-notes1.pdf), p. 2  
+Diagram  
+
+Training set, $\{(x^{(i)}, y^{(i)}); i = 1, \ldots, m\}$  
+Input,  $x$  
+Output, $y$   
+A hypothesis, $h: \mathcal{X} \mapsto \mathcal{Y}$  
+
+Continuous, regression problem  
+Discrete,   classification problem  
+
+# Linear Regression
+* [Note 1](./cs229-2018-autumn/notes/cs229-notes1.pdf), p. 3
+
+[Lecture 2@4:51](https://youtu.be/4b4MUYve_U8?si=kOpmyaQ-pbVZWoUD&t=291)  
+[Note 1](./cs229-2018-autumn/notes/cs229-notes1.pdf), p. 3  
+How to represent $h(x)$?  
+Linear regression, $h(x) = \theta_0 + \theta_1x_1 + \theta_2x_2$  
+
+[Lecture 2@7:54](https://youtu.be/4b4MUYve_U8?si=g7HG_okUwJNCbb0V&t=474)  
+$h(x) = \sum_{j=0}^2 \theta_jx_j$ where $x_0=1$  
+
+$x_1$, size  
+$x_2$, No. of bedrooms  
+$\theta$, parameters  
+
+$m$: No. of training examples, index $i$  
+$n$: No. of features, index $j$  
+$x$: inputs/features, size(x) = (m,n)  
+$y$: outputs/target variables, size(y) = m  
+$\theta_j$, $j^\text{th}$ parameter, $\text{size}(\theta) = n$  
+$(x,y)$: training example, $(x^{(i)},y^{(i)})$: $i^\text{th}$ training example  
+
+$h(\bm{x}) = \sum_{j=0}^n \theta_jx_j = \bm{\theta}^T\bm{x}$ where $x_0=1$  
+
+[Lecture 2@12:50](https://youtu.be/4b4MUYve_U8?si=4-Wq6xCgYbF6-sYb&t=770)  
+Note $h(\bm{x})$ somethime is written as $h_\theta(\bm{x})$ to emphasize parameters $\theta$.  
+
+Choose $\bm{\theta}$ such that $h_\theta(\bm{x}) \approx y$ for training example.  
+Minimize the cost function
 $$
-J(\theta) = \frac{1}{2}\sum_{i=1}^{m}(h_\theta(x^{(i)}) - y^{(i)})^2
+\begin{align*}
+J(\bm\theta) &= \frac{1}{2}\sum_{i=1}^{m}(h_\theta(\bm{x}^{(i)}) - y^{(i)})^2 \\
+             &= \frac{1}{2}\sum_{i=1}^{m}(\theta_0 + \theta_1x_1^{(i)} + \theta_2x_2^{(i)} + \ldots+ \theta_nx_n^{(i)} - y^{(i)})^2  \\
+\end{align*}
 $$
 
+> My understanding
+> $$
+> \begin{align*}
+> J(\bm\theta) &= \frac{1}{2} \| \bm{X}\bm\theta - \bm{y}\|_2^2 \\
+> \end{align*}
+> $$
+
+[Lecture 2@16:10](https://youtu.be/4b4MUYve_U8?si=4-Wq6xCgYbF6-sYb&t=970)  
+
+
+[Lecture 2@18:13](https://youtu.be/4b4MUYve_U8?si=3NGQOHHU1xN6yAxp&t=1093)  
+Gradient descent  
+Initial guess $\bm\theta = \vec{0}$  
+Keep change $\bm\theta$ to reduce $J(\bm\theta)$  
+3D plot, [Lecture 2@19:58](https://youtu.be/4b4MUYve_U8?si=3NGQOHHU1xN6yAxp&t=1198)  
+Gradient descent (in the steepest direction)  
+Step of gradient descent
+
+[Lecture 2@23:54](https://youtu.be/4b4MUYve_U8?si=3NGQOHHU1xN6yAxp&t=1434)  
 
 ## LMS algorithm
-* gradient descent (in the steepest direction)
-* Initial guess $\theta = \vec{0}$
-* 3D plot at 19:58
+* [Note 1](./cs229-2018-autumn/notes/cs229-notes1.pdf), p. 4  
+* Least mean squares
+
+$$
+\theta_j := \theta_j - \alpha\frac{\partial}{\partial\theta_j}J(\theta)
+$$
+
+where    $j = 0,1 \ldots ,n$,    $\alpha$ is the learning rate.  
+
+26:04
+
+Set $\alpha = 0.01$ in practice.
+
+27:33
+
+---
 
 <center> <img alt="Batch gradient descent" src="batch_gradient_descent.png" width="80%"/> </center>
 
