@@ -377,8 +377,12 @@ $\text{tr}\bm A\bm B\bm C = \text{tr}\bm C\bm A \bm B$
 $\nabla_{\bm A}\text{tr}\bm A\bm A^T\bm C = \bm C\bm A + \bm C^T\bm A$
 
 
+
+1:15:44
+
 <details>
 <summary>Proof of $\text{tr}\bm A \bm B = \text{tr}\bm B \bm A$</summary>
+
 
 $$
 \begin{align*}
@@ -391,6 +395,7 @@ $$
 $$
 
 </details>
+
 
 
 
@@ -441,8 +446,13 @@ $$
 [Lecture 2@1:13:16](https://youtu.be/4b4MUYve_U8?si=HZb_uHJVLOCVx3jo&t=4396)
 
 $$
-\nabla_{\bm\theta} J(\bm\theta) = \frac{1}{2}\nabla_{\bm\theta}(\bm X\bm\theta - \bm y)^T(\bm X\bm\theta - \bm y)
-
+\begin{align*}
+\nabla_{\bm\theta} J(\bm\theta) 
+&= \frac{1}{2}\nabla_{\bm\theta}(\bm X\bm\theta - \bm y)^T(\bm X\bm\theta - \bm y) \\
+&= \frac{1}{2}\nabla_{\bm\theta}(\bm\theta^T\bm X^T - \bm y^T)(\bm X\bm\theta - \bm y) \\
+&= \frac{1}{2}\nabla_{\bm\theta}(\bm\theta^T\bm X^T\bm X\bm\theta - \bm\theta^T\bm X^T\bm y - 
+\bm y^T\bm X\bm\theta + \bm y^T\bm y)
+\end{align*}
 $$
 
 
