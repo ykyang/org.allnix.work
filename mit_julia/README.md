@@ -27,3 +27,5 @@ Pluto.run()
 ```
 * Load `Homework 0` from URL `https://github.com/mitmath/computational-thinking/blob/Fall24/src/homework/hw0.jl`
 * Save to `homework/hw0.jl` using the drop down menu on the top
+
+# [Cheatsheets](https://computationalthinking.mit.edu/Fall24/cheatsheets/)
