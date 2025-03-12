@@ -35,7 +35,7 @@ Pluto.run()
 
 # Module 1
 1.1 [Images as Data and Arrays](images_abstractions/images.jl)  
-1.2 Abstraction  
+1.2 [Abstraction](images_abstractions/abstraction.jl)  
 
 # Module 2
 # Module 3
