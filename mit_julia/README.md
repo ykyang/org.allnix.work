@@ -29,3 +29,13 @@ Pluto.run()
 * Save to `homework/hw0.jl` using the drop down menu on the top
 
 # [Cheatsheets](https://computationalthinking.mit.edu/Fall24/cheatsheets/)
+* [Julia Cheatsheets](https://cheatsheet.juliadocs.org/)
+* [MATLAB-Julia-Python Cheatsheets](https://cheatsheets.quantecon.org/)
+* [Plots.jl Cheatsheets](https://github.com/sswatson/cheatsheets/blob/master/plotsjl-cheatsheet.pdf)
+
+# Module 1
+1.1 [Images as Data and Arrays](images_abstractions/images.jl)  
+1.2 Abstraction  
+
+# Module 2
+# Module 3
