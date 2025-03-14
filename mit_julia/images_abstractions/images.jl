@@ -24,7 +24,8 @@ end
 
 # ╔═╡ c9bedd5f-8868-42ee-b659-e48868bb5fbc
 md"""
-# [**1.1 Images as Data and Arrays**](https://computationalthinking.mit.edu/Fall24/images_abstractions/images/)
+# 1.1 Images as Data and Arrays
+[https://computationalthinking.mit.edu/Fall24/images_abstractions/images/](https://computationalthinking.mit.edu/Fall24/images_abstractions/images/)
 """
 
 # ╔═╡ f629bee6-62c0-43a7-8780-5eced7a4e7e5
