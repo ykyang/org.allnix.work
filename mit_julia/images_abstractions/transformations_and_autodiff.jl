@@ -4,6 +4,18 @@
 using Markdown
 using InteractiveUtils
 
+# This Pluto notebook uses @bind for interactivity. When running this notebook outside of Pluto, the following 'mock version' of @bind gives bound variables a default value (instead of an error).
+macro bind(def, element)
+    #! format: off
+    quote
+        local iv = try Base.loaded_modules[Base.PkgId(Base.UUID("6e696c72-6542-2067-7265-42206c756150"), "AbstractPlutoDingetjes")].Bonds.initial_value catch; b -> missing; end
+        local el = $(esc(element))
+        global $(esc(def)) = Core.applicable(Base.get, el) ? Base.get(el) : iv(el)
+        el
+    end
+    #! format: on
+end
+
 # ╔═╡ cc671a9b-c573-40a0-9d6f-b4e9332f37ea
 begin
 	using Colors, ColorVectorSpace, ImageShow, FileIO, ImageIO
@@ -34,6 +46,12 @@ html"""
 	}
 </style>
 """
+
+# ╔═╡ 5c537066-69f8-4cb9-b066-9eb578bf624b
+begin # utility
+	import Base.show
+	show(x) = show(stdout, "text/plain", x)
+end
 
 # ╔═╡ 87ec4dfc-b9f1-45ef-bb13-3cd8e16c30b9
 md"""
@@ -127,6 +145,79 @@ md"""
 md"""
 ## What is a transformation
 """
+
+# ╔═╡ 28b14e14-e7a3-45a9-bc15-cd8c8054af40
+img_sources = [
+	"https://user-images.githubusercontent.com/6933510/108605549-fb28e180-73b4-11eb-8520-7e29db0cc965.png" => "Corgis",
+	"https://user-images.githubusercontent.com/6933510/108883855-39690f80-7606-11eb-8eb1-e595c6c8d829.png" => "Arrows",
+	"https://images.squarespace-cdn.com/content/v1/5cb62a904d546e33119fa495/1589302981165-HHQ2A4JI07C43294HVPD/ke17ZwdGBToddI8pDm48kA7bHnZXCqgRu4g0_U7hbNpZw-zPPgdn4jUwVcJE1ZvWQUxwkmyExglNqGp0IvTJZamWLI2zvYWH8K3-s_4yszcp2ryTI0HqTOaaUohrI8PISCdr-3EAHMyS8K84wLA7X0UZoBreocI4zSJRMe1GOxcKMshLAGzx4R3EDFOm1kBS/fluffy+corgi?format=2500w" => "Long Corgi"
+];
+
+# ╔═╡ 84a881d5-5862-4dc1-a4bf-24d752b166d9
+begin # ???
+	white(c::RGB) = RGB(1,1,1)
+	white(c::RGBA) = RGB(1,1,1,0.75)
+end
+
+# ╔═╡ d3c07314-2e4c-4ce2-877c-3e3d24805d68
+range = -1.5:0.1:1.5
+
+# ╔═╡ e9e786c8-ed9d-4f65-ba49-671b0bf1b3d1
+
+
+# ╔═╡ 90e00d5a-bf37-47e3-8060-3a6bbc993c96
+
+
+md"""
+**Choose image:** $(@bind img_source Select(img_sources))
+
+α = $(@bind α Slider(0.1:0.1:3, show_value=true))
+
+
+a: $(@bind a Scrubbable(range; default=1.0))
+b: $(@bind b Scrubbable(range; default=0.0))
+
+c: $(@bind c Scrubbable(range; default=0.0))
+d: $(@bind d Scrubbable(range; default=1.0))
+"""
+
+# ╔═╡ 22ee6f4b-f00c-4cc8-ba4d-4aed60da1e1e
+img_original = load(download(img_source));
+
+# ╔═╡ 2b30776f-1574-4cad-9ee7-e6c2937824a3
+typeof(img_original)
+
+# ╔═╡ da7d791e-cd7e-4bc8-9a50-fff052a6dd7b
+
+
+# ╔═╡ d65c9937-a948-4f53-a387-5ac924fe5c41
+md"""
+center zoom = $(@bind z Slider(0.1:0.1:3, show_value=true, default=1))
+
+top left zoom = $(@bind f Slider(0.1:0.1:3; show_value=true, default=1))
+
+Show grid lines $(@bind show_grid CheckBox(default=true)) 
+"""
+
+# ╔═╡ 91b3c2b6-8d6f-4035-a4c6-08d3edd16a72
+A = [a b; c d]
+
+# ╔═╡ e6eb8b14-bbfd-4027-8b1d-df52de741651
+det(A)
+
+# ╔═╡ 9802c043-2a94-4223-a3ba-1e6cc4faf2ee
+	# if det(A) == 0
+	# 	RGB(1.0, 1.0, 1.0)
+	# else
+		
+	# 	 # in_x, in_y = A \ [out_x, out_y]
+ #         # in_x, in_y = xy( [out_x, out_y] )
+	# 	in_x, in_y =  T([out_x, out_y])
+	# 	trygetpixel(img, in_x, in_y)
+	# end
+
+	#for out_y in LinRange(f, -f, 500),
+	#	out_x in LinRange(-f, f, 500)
 
 # ╔═╡ 100a041a-caaf-4e5d-a6bd-0f5d2b0dbbe2
 md"""
@@ -229,8 +320,8 @@ begin
 end
 
 
-# ╔═╡ c4f584d1-fb89-46a6-9305-c376d7feefb2
-ForwardDiff.jacobian(warp(-3), [4, 5])
+# ╔═╡ 7015f0dc-1302-4071-a0a3-408c3b10fd7d
+T = genlin(a,b,c,d)
 
 # ╔═╡ a88993a6-0446-4bd0-a610-6105b7b54748
 let
@@ -239,13 +330,61 @@ let
 	@show rot(π/2)((4,5))
 end
 
+# ╔═╡ c4f584d1-fb89-46a6-9305-c376d7feefb2
+ret = ForwardDiff.jacobian(warp(-3), [4, 5]); show(ret)
+
 # ╔═╡ 8e43c394-7a2e-4b21-b960-9167a8380fec
 let
 	ϵ = 1e-6
 	w = warp(-3)
 	∂w∂x = (w([4+ϵ,5]) - w([4,5]))/ϵ
 	∂w∂y = (w([4,5+ϵ]) - w([4,5]))/ϵ
-	@show [∂w∂x ∂w∂y]
+	show([∂w∂x ∂w∂y])
+end
+
+# ╔═╡ 183a2f2a-a7da-46cc-ad4f-fbca0afb499f
+function with_gridlines(img; n=16)
+	sep_i = size(img,1) ÷ n # sep_i = div(size(img,1),n)
+	#@show size(img)
+	sep_j = size(img,2) ÷ n
+
+	result = copy(img)
+
+	stroke = RGBA(1,1,1,0.75)
+	result[1:sep_i:end,:] .= stroke
+	result[:,1:sep_j:end] .= stroke
+	result[2:sep_i:end,:] .= stroke
+	result[:,2:sep_j:end] .= stroke
+
+	result[n÷2*sep_i .+ [0,1,2], :] .= RGBA(0.1,0.9,0.1,0.75)
+	result[:, n÷2*sep_j .+ [0,1,2]] .= RGBA(0.9,0.1,0.1,0.75)
+	
+	return result
+end
+
+# ╔═╡ ca3f89e0-cd33-450d-9f7a-6a78792b5a52
+img = if show_grid
+	with_gridlines(img_original)
+else
+	img_original
+end
+
+# ╔═╡ 8a09732d-c661-4d4a-8301-b330064bcd30
+function trygetpixel(img::AbstractMatrix, x::Float64, y::Float64)
+	rows, cols = size(img)
+	
+	"The linear map [-1,1] ↦ [0,1]"
+	f = t -> (t - -1.0)/(1.0 - -1.0)
+	
+	i = floor(Int, rows *  f(-y) / z)
+	j = floor(Int, cols *  f(x * (rows / cols))  / z)
+
+	if 1 < i ≤ rows && 1 < j ≤ cols
+		img[i,j]
+	else
+		RGB(1,1,1)#white(img[1,1])
+
+	end
 end
 
 # ╔═╡ e1eb4883-25af-4686-b901-6669d1531e35
@@ -1080,6 +1219,7 @@ version = "17.4.0+2"
 # ╠═cc671a9b-c573-40a0-9d6f-b4e9332f37ea
 # ╠═556cf40e-3ed5-4c01-a3bc-556a4b92ee44
 # ╠═ccee299a-74d3-4632-8fc9-febf855eb718
+# ╠═5c537066-69f8-4cb9-b066-9eb578bf624b
 # ╠═87ec4dfc-b9f1-45ef-bb13-3cd8e16c30b9
 # ╠═ad9c5ebf-39fd-433a-87f1-b7f0e85bb19d
 # ╠═dab2b7bd-9d9f-4bcb-a48a-bc3c1e2e1a8e
@@ -1111,6 +1251,22 @@ version = "17.4.0+2"
 # ╠═c4f584d1-fb89-46a6-9305-c376d7feefb2
 # ╠═8e43c394-7a2e-4b21-b960-9167a8380fec
 # ╠═22d00817-c865-4d27-aa03-4080c4fbe14f
+# ╠═28b14e14-e7a3-45a9-bc15-cd8c8054af40
+# ╠═22ee6f4b-f00c-4cc8-ba4d-4aed60da1e1e
+# ╠═2b30776f-1574-4cad-9ee7-e6c2937824a3
+# ╠═84a881d5-5862-4dc1-a4bf-24d752b166d9
+# ╠═d3c07314-2e4c-4ce2-877c-3e3d24805d68
+# ╠═7015f0dc-1302-4071-a0a3-408c3b10fd7d
+# ╠═ca3f89e0-cd33-450d-9f7a-6a78792b5a52
+# ╠═e9e786c8-ed9d-4f65-ba49-671b0bf1b3d1
+# ╟─90e00d5a-bf37-47e3-8060-3a6bbc993c96
+# ╠═da7d791e-cd7e-4bc8-9a50-fff052a6dd7b
+# ╠═d65c9937-a948-4f53-a387-5ac924fe5c41
+# ╠═91b3c2b6-8d6f-4035-a4c6-08d3edd16a72
+# ╠═e6eb8b14-bbfd-4027-8b1d-df52de741651
+# ╠═183a2f2a-a7da-46cc-ad4f-fbca0afb499f
+# ╠═8a09732d-c661-4d4a-8301-b330064bcd30
+# ╠═9802c043-2a94-4223-a3ba-1e6cc4faf2ee
 # ╠═100a041a-caaf-4e5d-a6bd-0f5d2b0dbbe2
 # ╠═e1eb4883-25af-4686-b901-6669d1531e35
 # ╠═bb0471f2-daaf-41ec-9f3e-93739d6bfa7c
