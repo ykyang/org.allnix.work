@@ -7,32 +7,65 @@ format:
 #  - \usepackage{bm}
 ---
 
-# MY CS229
-**Class material**
+<!-- Compile with
+quarto preview README.md --to html --no-browser --no-watch-inputs
+quarto render README.md --to html
+-->
+
+<font size="7">MY CS229</font>
+
+**Class material**  
+<details>
+<summary>Class material</summary>
+
 > [Syllabus](./cs229-2018-autumn/syllabus-autumn2018.html)  
 > [Stanford CS229 on YouTube](https://youtube.com/playlist?list=PLoROMvodv4rMiGQp3WXShtMGgzqpfVfbU&si=kS07gMKIi_NB2Rlm)  
 > [Handouts on Github](https://github.com/maxim5/cs229-2018-autumn)  
 > [Python Tutorial](./cs229-2018-autumn/section/cs229_python_tutorial/cs229_python_friday.pdf)  
 > [ml-yearning book](https://github.com/yennlh/ml-yearning)  
+</details>
 
-**Class timeline**
+**Class timeline**  
 > [Note 1](./cs229-2018-autumn/notes/cs229-notes1.pdf)  
 > [Lecture 1](https://youtu.be/jGwO_UgTS7I?si=WSwUyA5wdGubuhKr)  
 > [Problem Set 0](./cs229-2018-autumn/problem-sets/PS0/ps0.pdf), due on Lecture 4?  
 > [Discussion Section: Linear Algebra](./cs229-2018-autumn/section/cs229-linalg.pdf)
 > [Problem Set 1](./cs229-2018-autumn/problem-sets/PS1/ps1.pdf), due on Lecture 8
 
+**Table of Content**
+<!-- TOC -->
 
+- [LECTURE 1](#lecture-1)
+- [NOTE 1](#note-1)
+- [Supervised Learning](#supervised-learning)
+- [LECTURE 2](#lecture-2)
+- [Linear Regression](#linear-regression)
+- [LMS algorithm](#lms-algorithm)
+- [The normal equations](#the-normal-equations)
+- [Matrix derivatives](#matrix-derivatives)
+        - [Least squares revisited](#least-squares-revisited)
+    - [Locally weighted linear regression](#locally-weighted-linear-regression)
+    - [Probabilistic interpretation](#probabilistic-interpretation)
+- [Classification and logistic regression](#classification-and-logistic-regression)
+    - [Logistic regression](#logistic-regression)
+    - [Another algorithm for maximizing](#another-algorithm-for-maximizing)
+    - [Digression: The perceptron learning algorithm](#digression-the-perceptron-learning-algorithm)
+- [Generalized Linear Models](#generalized-linear-models)
+    - [The exponential family](#the-exponential-family)
+    - [Constructing GLMs](#constructing-glms)
 
-# [LECTURE 1](https://youtu.be/jGwO_UgTS7I?si=WSwUyA5wdGubuhKr)
+<!-- /TOC -->
+
+# LECTURE 1
 * 2018-09-24
-* https://youtu.be/jGwO_UgTS7I?si=WSwUyA5wdGubuhKr
+* [https://youtu.be/jGwO_UgTS7I?si=WSwUyA5wdGubuhKr](https://youtu.be/jGwO_UgTS7I?si=WSwUyA5wdGubuhKr)
 * [Lecture 1 starts at @36:20](https://youtu.be/jGwO_UgTS7I?si=aOaDLuqM2u4Sp_Dj&t=2180)  
 
 
-# [NOTE 1](./cs229-2018-autumn/notes/cs229-notes1.pdf)
+# NOTE 1
 * Supervised Learning
-* `cs229-2018-autumn/notes/cs229-notes1.pdf`
+* [cs229-2018-autumn/notes/cs229-notes1.pdf](cs229-2018-autumn/notes/cs229-notes1.pdf)
+
 
 <details open="true">
 <summary>Supervised Learning</summary>
@@ -296,8 +329,6 @@ h = x * θ
 Stochastic gradient descent is faster than batch gradient descent.
 
 **Stochastic gradient descent**
-
-<!-- <center> <img src="stochastic_gradient_descent.png" width="80%"/> </center> -->
 
 $$
 \begin{align*}
