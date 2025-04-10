@@ -36,6 +36,7 @@ Pluto.run()
 # Module 1
 1.1 [Images as Data and Arrays](images_abstractions/images.jl)  
 1.2 [Abstraction](images_abstractions/abstraction.jl)  
-
+1.3 [Automatic Differentiation](images_abstractions/transformations_and_autodiff.jl)  
+1.4 [Transformations with Images](images_abstractions/transforming_images.jl)
 # Module 2
 # Module 3
