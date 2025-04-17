@@ -31,3 +31,15 @@ $text-muted: #6a737b;
   margin-bottom: 0.5rem;
 }
 
+/*
+https://github.com/quarto-dev/quarto-cli/discussions/4755#discussioncomment-5631059 
+
+Change the font size of callout body to be the same as text.
+Usage
+
+::: {.callout-note .my-callout}
+*/
+
+.callout.callout-style-default.my-callout .callout-body {
+  font-size: 1.0rem;
+}
