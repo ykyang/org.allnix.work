@@ -1,60 +1,42 @@
 ---
 format:
   html:
+    toc: true
     html-math-method: katex
+#    html-math-method: mathjax
+#    html-math-method: mathml
+    theme:
+      light: [cosmo, theme.scss]
+    css: styles.css
 #header-includes:
 #  - \usepackage{algorithm}
+#   - \usepackage{amsmath}
 #  - \usepackage{bm}
 ---
 
 <!-- Compile with
-quarto preview README.md --to html --no-browser --no-watch-inputs
-quarto render README.md --to html
+quarto preview README.qmd --to html --no-browser --no-watch-inputs
+quarto render README.qmd --to html
 -->
 
 <font size="7">MY CS229</font>
 
-**Class material**  
-<details>
-<summary>Class material</summary>
+::::{.callout-note .my-callout title="Class material" icon=false collapse=true}
+* [Stanford CS229 on YouTube](https://youtube.com/playlist?list=PLoROMvodv4rMiGQp3WXShtMGgzqpfVfbU&si=kS07gMKIi_NB2Rlm)  
+* [Handouts on Github](https://github.com/maxim5/cs229-2018-autumn)  
+* [Python Tutorial](./cs229-2018-autumn/section/cs229_python_tutorial/cs229_python_friday.pdf)  
+* [ml-yearning book](https://github.com/yennlh/ml-yearning)  
+::::
 
-> [Syllabus](./cs229-2018-autumn/syllabus-autumn2018.html)  
-> [Stanford CS229 on YouTube](https://youtube.com/playlist?list=PLoROMvodv4rMiGQp3WXShtMGgzqpfVfbU&si=kS07gMKIi_NB2Rlm)  
-> [Handouts on Github](https://github.com/maxim5/cs229-2018-autumn)  
-> [Python Tutorial](./cs229-2018-autumn/section/cs229_python_tutorial/cs229_python_friday.pdf)  
-> [ml-yearning book](https://github.com/yennlh/ml-yearning)  
-</details>
+::::{.callout-note .my-callout title="Class timeline" icon=false collapse=true}
+* [Note 1](./cs229-2018-autumn/notes/cs229-notes1.pdf)  
+* [Lecture 1](https://youtu.be/jGwO_UgTS7I?si=WSwUyA5wdGubuhKr)  
+* [Problem Set 0](./cs229-2018-autumn/problem-sets/PS0/ps0.pdf), due on Lecture 4?  
+* [Discussion Section: Linear Algebra](./cs229-2018-autumn/section/cs229-linalg.pdf)
+* [Problem Set 1](./cs229-2018-autumn/problem-sets/PS1/ps1.pdf), due on Lecture 8
+::::
 
-**Class timeline**  
-> [Note 1](./cs229-2018-autumn/notes/cs229-notes1.pdf)  
-> [Lecture 1](https://youtu.be/jGwO_UgTS7I?si=WSwUyA5wdGubuhKr)  
-> [Problem Set 0](./cs229-2018-autumn/problem-sets/PS0/ps0.pdf), due on Lecture 4?  
-> [Discussion Section: Linear Algebra](./cs229-2018-autumn/section/cs229-linalg.pdf)
-> [Problem Set 1](./cs229-2018-autumn/problem-sets/PS1/ps1.pdf), due on Lecture 8
 
-**Table of Content**
-<!-- TOC -->
-
-- [LECTURE 1](#lecture-1)
-- [NOTE 1](#note-1)
-- [Supervised Learning](#supervised-learning)
-- [LECTURE 2](#lecture-2)
-- [Linear Regression](#linear-regression)
-- [LMS algorithm](#lms-algorithm)
-- [The normal equations](#the-normal-equations)
-- [Matrix derivatives](#matrix-derivatives)
-        - [Least squares revisited](#least-squares-revisited)
-    - [Locally weighted linear regression](#locally-weighted-linear-regression)
-    - [Probabilistic interpretation](#probabilistic-interpretation)
-- [Classification and logistic regression](#classification-and-logistic-regression)
-    - [Logistic regression](#logistic-regression)
-    - [Another algorithm for maximizing](#another-algorithm-for-maximizing)
-    - [Digression: The perceptron learning algorithm](#digression-the-perceptron-learning-algorithm)
-- [Generalized Linear Models](#generalized-linear-models)
-    - [The exponential family](#the-exponential-family)
-    - [Constructing GLMs](#constructing-glms)
-
-<!-- /TOC -->
 
 # LECTURE 1
 * 2018-09-24
@@ -63,18 +45,16 @@ quarto render README.md --to html
 
 
 # NOTE 1
-* Supervised Learning
+* **Supervised Learning**
 * [cs229-2018-autumn/notes/cs229-notes1.pdf](cs229-2018-autumn/notes/cs229-notes1.pdf)
 
 
-<details open="true">
-<summary>Supervised Learning</summary>
-
+::::{.callout-note .my-callout title="Table of content" icon=false collapse=true}
 * `Part I` [Linear Regression](#linear-regression)
     * `1` [LMS algorithm](#lms-algorithm)
     * `2` [The normal equations](#the-normal-equations)
-        * `2.1` Matrix derivatives
-        * `2.2` Least squares revisited
+        * `2.1` [Matrix derivatives](#matrix-derivatives)
+        * `2.2` [Least squares revisited](#least-squares-revisited)
     * `3` Probabilistic interpretation
     * `4` Locally weighted linear regression
 * `Part II` Classification and Logistic Regression
@@ -87,45 +67,54 @@ quarto render README.md --to html
         * `9.1` Ordinary least squares
         * `9.2` Logistic regression
         * `9.3` Softmax Regression
-</details>
+::::
 
----
 
+::::{.callout-tip .my-callout title="Lecture 1" icon=false collapse=true}
 [Lecture 1@35:20](https://youtu.be/jGwO_UgTS7I?si=aOaDLuqM2u4Sp_Dj&t=2120)  
-CS229a is more applied (on Coursera?)  
+CS229a is more applied (is it the one on Coursera?)  
 CS229 most mathematical   
 CS230 deep learning  
 
 [Lecture 1@39:34](https://youtu.be/jGwO_UgTS7I?si=aOaDLuqM2u4Sp_Dj&t=2374)  
 [Note 1](./cs229-2018-autumn/notes/cs229-notes1.pdf), p. 1
+::::
 
 # Supervised Learning
-See the `housing price` example in [Note 1](./cs229-2018-autumn/notes/cs229-notes1.pdf), p. 1.
+* `housing price` example in [Note 1](./cs229-2018-autumn/notes/cs229-notes1.pdf), p. 1.
 
-Training set, $\{(\bm x^{(i)}, y^{(i)}); i = 1, \ldots, m\}$  
-Input,  $\bm x$  
-Output, $y$   
-Hypothesis, $h: \mathcal{X} \mapsto \mathcal{Y}$  
+Training set 
 
-Continuous, regression problem  
-Discrete,   classification problem  
+$$\{(\bm x^{(i)}, y^{(i)}); i = 1, \ldots, m\}$$
 
----
+* $m$, number of examples
+* $\bm x$, input  
+* $y$, output
 
-**5 topics**
+Hypothesis
+
+$$h: \mathcal{X} \mapsto \mathcal{Y}$$
+
+such that $h \approx y$.
+
+* Regression problem if $y$ is continuous
+* Classification problem if $y$ is discrete
+
+::::{.callout-tip .my-callout title="Lecture 1 - Five topics" icon=false collapse=true}
+Five topics of machine learning
 
 * Supervised learning, [Lecture 1@39:34](https://youtu.be/jGwO_UgTS7I?si=aOaDLuqM2u4Sp_Dj&t=2374)
 * Machine learning strategy, [Lecture 1@58:19](https://youtu.be/jGwO_UgTS7I?si=Zp7HmdCk4g7Ul6Pd&t=3499)
 * Deep learning, [Lecture 1@1:04:06](https://youtu.be/jGwO_UgTS7I?si=MiGzHLya5JawEoyb&t=3846)
 * Unsupervised learning, [Lecture 1@1:04:55](https://youtu.be/jGwO_UgTS7I?si=KzVPsuc5X0GrUjk7&t=3895)
 * Reinforcement learning, [Lecture 1@1:11:18](https://youtu.be/jGwO_UgTS7I?si=7al9kavU1hUy5g9I&t=4278)
+::::
 
-# [LECTURE 2](https://youtu.be/4b4MUYve_U8?si=fWcooAh8yaYWXHPA)
+# LECTURE 2
 * 2018-09-26
-* https://youtu.be/4b4MUYve_U8?si=fWcooAh8yaYWXHPA
+* [https://youtu.be/4b4MUYve_U8?si=fWcooAh8yaYWXHPA](https://youtu.be/4b4MUYve_U8?si=fWcooAh8yaYWXHPA)
 
----
-
+::: {.callout-tip .my-callout title="Lecture 2" icon=false collapse=true}
 [Lecture 2@2:39](https://youtu.be/4b4MUYve_U8?si=x9f1zW1no4TAYxAl&t=159)  
 [Note 1](./cs229-2018-autumn/notes/cs229-notes1.pdf), p. 1  
 Example  
@@ -138,43 +127,81 @@ Supervised learning
 [Note 1](./cs229-2018-autumn/notes/cs229-notes1.pdf), p. 2  
 Diagram  
 
-
-
-
 [Lecture 2@4:51](https://youtu.be/4b4MUYve_U8?si=kOpmyaQ-pbVZWoUD&t=291)  
-[Note 1](./cs229-2018-autumn/notes/cs229-notes1.pdf), p. 3
+[Note 1](./cs229-2018-autumn/notes/cs229-notes1.pdf), p. 3  
+Linear regression
+:::
 
 # Linear Regression
-How to represent $h(\bm x)$?  
-Linear regression with two features, $h(\bm x) = \theta_0x_0 + \theta_1x_1 + \theta_2x_2$
+Let the hypothesis be a linear function
+$$h(\bm x) = \theta_0x_0 + \theta_1x_1 + \dots + \theta_nx_n$$
 
-[Lecture 2@7:54](https://youtu.be/4b4MUYve_U8?si=g7HG_okUwJNCbb0V&t=474)  
-$h(\bm x) = \sum_{j=0}^2 \theta_jx_j$  
 
-where 
-* $x_0=1$
+
+Choose $\theta$ such that $h \approx y$.
+
+<!--
+= \sum_{j=0}^n \theta_jx_j
+* Let $h(\bm x) = \sum_{j=0}^n \theta_jx_j$
+* Choose $\theta$ such that $h \approx y$
+-->
+::: {.callout-note .my-callout title="Example" icon=false collapse=false}
+For $n=2$,
+
+$$h(\bm x) = \theta_0 \cdot 1 + \theta_1x_1 + \theta_2x_2 \approx y$$
+
+* $h \approx y$, price of the house
+* $x_0 = 1$
 * $x_1$, size of the house
-* $x_2$, No. of bedrooms  
-* $\theta$'s, parameters  
+* $x_2$, number of bedrooms  
+* $\theta$, parameters
+:::
 
-**Symbols**
-* $m$:     No. of training examples, $i = 1:m$
-* $n$:     No. of features, $j = 0:n$
+::: {.column-margin}
+[Lecture 2@7:54](https://youtu.be/4b4MUYve_U8?si=g7HG_okUwJNCbb0V&t=474)
+:::
+
+General form of the linear function
+
+$$h(\bm x^{(i)}) = h^{(i)} = \sum_{j=0}^n \theta_jx_j^{(i)} = \bm{x}^{(i)^T}\bm{\theta}$$
+
+* $i$, index of training example
+* $m$, number of training examples, $\{i: 1 \le i \le m\}$
+* $n$, number of features, $\{j: 0 \le j \le n \}$
+* $\bm \theta$, parameter vector, size is $n+1$
+* $(\bm x^{(i)},y^{(i)})$, $i^\text{th}$ training example  
+
+See [matrix](#matrix-derivatives) for the matrix form.
+
+<!--
+In matrix form
+
+$$\bm h = \begin{bmatrix} 
+ & \bm x^{(1)^T} \\ 
+ & \bm x^{(2)^T} \\ 
+ & \cdot         \\
+ & \cdot         \\
+ & \bm x^{(m)^T} 
+\end{bmatrix} = \bm X \bm\theta \approx \bm{y}
+$$
+
+* $\bm h^{m\times 1}$: hypothesis
 * $\bm X^{m\times n}$: inputs/features
 * $\bm y^{m\times 1}$: outputs/target variables
-* $\bm \theta^{n\times 1}$: parameters
-* $(\bm x^{(i)},y^{(i)})$: $i^\text{th}$ training example  
+-->
 
-$h(\bm x^{(i)}) = \sum_{j=0}^n \theta_jx_j^{(i)} = \bm{\theta}^T\bm{x}^{(i)}$ where $x_0^{(i)}=1$  
+::: {.column-margin}
+[Lecture 2@12:50](https://youtu.be/4b4MUYve_U8?si=4-Wq6xCgYbF6-sYb&t=770)
+:::
 
-[Lecture 2@12:50](https://youtu.be/4b4MUYve_U8?si=4-Wq6xCgYbF6-sYb&t=770)  
-Note $h(\bm{x})$ somethime is written as $h_\theta(\bm{x})$ to emphasize parameters $\theta$.  
-Choose $\bm{\theta}$ such that $h_{\bm\theta}(\bm{x}) \approx y$ for training example.  
-Define the cost function
+* Note $h(\bm{x})$ somethime is written as $h_\theta(\bm{x})$ to emphasize parameters $\theta$.  
+* Choose $\bm{\theta}$ such that $h_{\bm\theta}(\bm{x}) \approx y$ for training examples.  
+
+Define the **cost function**
 
 $$
 \begin{align*}
-J(\bm\theta) &= \frac{1}{2}\sum_{i=1}^{m}(h_\theta(\bm{x}^{(i)}) - y^{(i)})^2 \\
+J(\bm\theta) &= \frac{1}{2}\sum_{i=1}^{m}(h^{(i)} - y^{(i)})^2 \\
              &= \frac{1}{2}\sum_{i=1}^{m}(\theta_0 + \theta_1x_1^{(i)} + \theta_2x_2^{(i)} + \ldots+ \theta_nx_n^{(i)} - y^{(i)})^2  \\
 \end{align*}
 $$
@@ -189,6 +216,7 @@ $$
 > \end{align*}
 > $$
 
+::: {.callout-tip .my-callout title="Lecture 2" icon=false collapse=true}
 [Lecture 2@16:10](https://youtu.be/4b4MUYve_U8?si=4-Wq6xCgYbF6-sYb&t=970)  
 [Lecture 2@18:13](https://youtu.be/4b4MUYve_U8?si=3NGQOHHU1xN6yAxp&t=1093)  
 Gradient descent  
@@ -198,111 +226,112 @@ Keep change $\bm\theta$ to reduce $J(\bm\theta)$
 Gradient descent (in the steepest direction)  
 Step of gradient descent
 
-
-
-
 [Lecture 2@23:54](https://youtu.be/4b4MUYve_U8?si=3NGQOHHU1xN6yAxp&t=1434)  
-[Note 1](./cs229-2018-autumn/notes/cs229-notes1.pdf), p. 4  
+:::
 
 # LMS algorithm
-
-* LMS, least mean squares
+* [Note 1](./cs229-2018-autumn/notes/cs229-notes1.pdf), p. 4
+* Least mean squares
 
 **Gradient descent**
 $$
 \theta_j := \theta_j - \alpha\frac{\partial}{\partial\theta_j}J(\bm\theta)
 $$
 
-where    
-* $j = 0:n$
-* $\alpha$, the learning rate.  
+where
 
+* $j$, index of features, $0\dots n$
+* $\alpha$, learning rate.  
+
+::: {.callout-tip .my-callout title="Lecture 2" icon=false collapse=true}
 [Lecture 2@26:04](https://youtu.be/4b4MUYve_U8?si=rp_57eeGH42uDfuo&t=1564)  
 Set $\alpha = 0.01$ in practice.  
 [Lecture 2@30:27](https://youtu.be/4b4MUYve_U8?si=rp_57eeGH42uDfuo&t=1827)  
-Partial derivative of ${\partial J(\theta)}/{\partial\theta_j}$
+:::
+
+Recall $h = h(\bm\theta,\bm x)$, so the partial derivative is
 $$
 \begin{align*}
-\frac{\partial}{\partial\theta_j}J(\bm\theta) 
- &= \frac{\partial}{\partial\theta_j} \frac{1}{2}\sum_{i=1}^{m}(h_\theta(\bm{x}^{(i)}) - y^{(i)})^2 \\
- & = \frac{2}{2}\sum_{i=1}^{m}(h_\theta(\bm{x}^{(i)}) - y^{(i)}) \cdot 
-     \frac{\partial}{\partial\theta_j}(h_\theta(\bm{x}^{(i)}) - y^{(i)}) \\
- & = \sum_{i=1}^{m}(h_\theta(\bm{x}^{(i)}) - y^{(i)}) \cdot 
-     \frac{\partial}{\partial\theta_j}(\sum_{j=0}^n \theta_jx_j^{(i)} - y^{(i)}) \\
- & = \sum_{i=1}^{m}(h_\theta(\bm{x}^{(i)}) - y^{(i)}) \cdot x_j^{(i)} \\         
+\frac{\partial J(\bm\theta) }{\partial\theta_j}
+ &=  \frac{1}{2}\sum_{i=1}^{m}\frac{\partial}{\partial\theta_j}(h^{(i)} - y^{(i)})^2 \\
+ & = \frac{1}{2}\sum_{i=1}^{m} 2 \cdot (h^{(i)} - y^{(i)}) \cdot 
+       \frac{\partial}{\partial\theta_j}(h^{(i)} - y^{(i)}) \\
+ & = \sum_{i=1}^{m}(h^{(i)} - y^{(i)}) \cdot 
+       \frac{\partial}{\partial\theta_j}(\sum_{j=0}^n \theta_jx_j^{(i)} - y^{(i)}) \\
+ & = \sum_{i=1}^{m}(h^{(i)} - y^{(i)}) \cdot x_j^{(i)} \\         
 \end{align*}
 $$
 
 In summary
 $$
 \begin{align*}
-\theta_j &:= \theta_j - \alpha\frac{\partial}{\partial\theta_j}J(\bm\theta) \\
-\theta_j &:= \theta_j - \alpha\sum_{i=1}^{m}(h_\theta(\bm{x}^{(i)}) - y^{(i)}) \cdot x_j^{(i)} \\
+\theta_j &:= \theta_j - \alpha\sum_{i=1}^{m}(h^{(i)} - y^{(i)}) \cdot x_j^{(i)} \\
 \end{align*}
 $$
 
-* $\alpha$, learning rate
 * LMS update rule (Widrow-Hoff learning rule)
-* the update is proportional to the error, $h(\bm x^{(i)}) - y^{(i)}$
+* the update is proportional to the error, $(h^{(i)} - y^{(i)})$
+* $\alpha$, learning rate
 * $J(\bm\theta)$ is a convex quadratic function
 
----
+Batch gradient descent could be **slow with large data set**.
 
-**Batch gradient descent**
-
+::::{.callout-note .my-callout title="Batch gradient descent" icon=false collapse=false}
 $$
 \begin{align*}
-&\text{while}\ J(\bm\theta)\  \text{not converged}\\
-&\qquad \text{for}\ j = 1:n \\
-&\qquad\qquad \theta_j := \theta_j - \alpha\sum_{i=1}^{m}(h_\theta(\bm{x}^{(i)}) - y^{(i)}) \cdot x_j^{(i)} \\
+&\text{while}\ J(\bm\theta)\  \text{is not converged}\\
+&\qquad \text{for}\ j = 1:n \quad\text{\footnotesize\# parameters} \\
+&\qquad\qquad \theta_j := \theta_j - \alpha\sum_{i=1}^{m}(h^{(i)} - y^{(i)}) \cdot x_j^{(i)} \\
 &\qquad \text{end} \\
 &\text{end}
 \end{align*}
 $$
+::::
 
-<details>
-<summary><b>Batch gradient descent in Julia</b></summary>
-
-Repeat for every $j$ until converge
-
+::::{.callout-note .my-callout title="Batch gradient descent in Julia" icon=false collapse=false}
 ```julia
 # Batch gradient descent
 # size(x) == (m,n)
+# size(y) == (m,)
 # m >> n
 
+function converged()
+    # TODO, check J(θ)
+end
+
+h(θ,v) = dot(θ,v)
 while !converged()
-    for j in 1:n # parameters
-        total = 0.0
-        for i in 1:m # samples
-            "Use θ from last iteration?"
-            total += (θ'*x[i,:] - y[i])*x[i,j]
+    for j in 1:n      # parameters
+        acc = 0.0     # accumulation
+        for i in 1:m  # training examples
+            acc += (h(θ,x[i,:]) - y[i]) * x[i,j]
         end
-        θ_new[j] = θ[j] + ⍺*total
+        θ_new[j] = θ[j] - ⍺*acc
     end
     θ .= θ_new 
 end
 ```
-</details>
+::::
 
+::::{.callout-tip .my-callout title="Lecture 2" icon=false collapse=true}
 [Lecture 2@34:26](https://youtu.be/4b4MUYve_U8?si=2W825SRd4Om_MIOe&t=2066), 3D plot  
 Try $\alpha$ by $0.01, 0.02, 0.04, 0.08 \ldots$.  
 [Lecture 2@37:25](https://youtu.be/4b4MUYve_U8?si=2W825SRd4Om_MIOe&t=2245), 2D plot  
+::::
 
----
 
-<details><summary>Under Construction</summary>
-
+::::{.callout-caution .my-callout title="TODO" icon=false collapse=true}
 ```julia
 # Repeat until convergence
 # size(x) == (m,n)
 # m >> n
 # θ[n], x[m,n], y[m]
-for j in 1:n # parameters
-    s = 0.0
-    for i in 1:m # examples
-        s += (y[i] - x[i:i,:]*θ)*x[i,j]
+for j in 1:n     # parameters
+    acc = 0.0    # accumulation
+    for i in 1:m # training examples
+        acc += (y[i] - x[i:i,:]*θ)*x[i,j]
     end
-    θ[j] = θ[j] + ⍺ * s
+    θ[j] = θ[j] + ⍺ * acc
 end
 
 # zero index will be a problem in Julia
@@ -321,59 +350,74 @@ h = x * θ
 #   n   1  nxm     mx1
 θ = θ + ⍺ * x' * (y - h)
 ```
-</details>
+::::
 
----
+Stochastic gradient descent is **faster** than batch gradient descent.
 
-[Lecture 2@44:47](https://youtu.be/4b4MUYve_U8?si=vGQnctfr3f7uigsP&t=2687)  
-Stochastic gradient descent is faster than batch gradient descent.
+::: {.column-margin}
+[Lecture 2@44:47](https://youtu.be/4b4MUYve_U8?si=vGQnctfr3f7uigsP&t=2687)
+:::
 
-**Stochastic gradient descent**
+::::{.callout-note .my-callout title="Stochastic gradient descent" icon=false collapse=false}
 
 $$
 \begin{align*}
-&\text{while}\ J(\bm\theta)\  \text{not converged}\\
-&\qquad\text{for}\ i = 1:m  \\
-&\qquad\qquad\text{for}\ j = 1:n  \\
-&\qquad\qquad\qquad \theta_j := \theta_j - \alpha(h_\theta(x^{(i)}) - y^{(i)})x_j^{(i)} \\
+&\text{while}\ J(\bm\theta)\ \text{is not converged}\\
+&\qquad\text{for}\ i = 1:m  \quad\text{\footnotesize \# training data} \\
+&\qquad\qquad\text{for}\ j = 1:n  \quad\text{\footnotesize \# parameters} \\
+&\qquad\qquad\qquad \theta_j := \theta_j - \alpha(h^{(i)} - y^{(i)})\cdot x_j^{(i)} \\
 &\qquad\qquad\text{end} \\
 &\qquad\text{end} \\
 &\text{end}
 \end{align*}
 $$ 
+::::
 
-* Could reduce learning rate, $\alpha$, over time
+The learning rate, $\alpha$, could be reduced over time.
 
-<details>
-<summary><b>Stochastic gradient descent in Julia</b></summary>
+::: {.callout-note .my-callout title="Stochastic gradient descent in Julia" icon=false collapse=false}
 
 ```julia
+using LinearAlgebra
+h(u,v) = dot(u,v)
 while !converged()
-    for i in 1:m # samples
-            ẟ = θ'*x[i,:] - y[i]
-        for j in 1:n # parameter 
-            # θ[j] = θ[j] - ⍺*(θ'*x[i,:] - y[i]) * x[j]
-            θ_new[j] = θ[j] - ⍺ * ẟ * x[j]
-        end
-        θ .= θ_new
+    for i in 1:m # training data
+        θ .-= ⍺ * (h(θ,x[i,:]) - y[i]) * transpose(x[i,:])
     end
 end
 ```
+:::
 
-</details>
 
----
-
-[Lecture 2@53:51](https://youtu.be/4b4MUYve_U8?si=j2zZ4OXJSM4CO52b&t=3231), the normal equations
 
 # The normal equations
+
+::: {.column-margin}
+[Lecture 2@53:51](https://youtu.be/4b4MUYve_U8?si=j2zZ4OXJSM4CO52b&t=3231)
+:::
+
 * Only works for linear regression
-* Analytical solution to the minimization of $J(\bm\theta)$
+* Analytical solution of $\bm\theta$ to the minimization of $J(\bm\theta)$
 
-[Lecture 2@56:36](https://youtu.be/4b4MUYve_U8?si=wT_tj5E-IWv74IBT&t=3396), derivation of the normal equation
+:::{.column-margin}
+[Lecture 2@56:36](https://youtu.be/4b4MUYve_U8?si=wT_tj5E-IWv74IBT&t=3396), derivation
+:::
 
-$\theta \in \mathbb{R}^{n+1}$, for $n=2$
+::: {.callout-note .my-callout title="$\nabla_{\bm\theta} J(\bm\theta)$" icon=false collapse=false}
+$$\theta \in \mathbb{R}^{n+1}$$
+$$
+\nabla_{\bm\theta} J(\bm\theta) = \nabla J(\bm\theta) = 
+\begin{bmatrix}
+\partial J/\partial \theta_0 \\
+\partial J/\partial \theta_1 \\
+\cdot \\
+\partial J/\partial \theta_n \\
+\end{bmatrix}
+$$
+:::
 
+::: {.callout-note .my-callout title="Example" icon=false collapse=true}
+$$n=2$$
 $$
 \nabla_{\bm\theta} J(\bm\theta) = 
 \begin{bmatrix}
@@ -382,10 +426,24 @@ $$
 \partial J/\partial \theta_2 \\
 \end{bmatrix}
 $$
+:::
 
-# Matrix derivatives
-$\bm A \in \mathbb R^{2\times 2}$, $f : \mathbb R^{2\times 2} \mapsto \mathbb R$  
-[Lecture 2@1:00:02](https://youtu.be/4b4MUYve_U8?si=wQGqaMwfErzCM6So&t=3602)  
+## Matrix derivatives
+Properties of matrix derivatives and trace.  Prerequisite of solving the normal
+equations.
+
+::::{.column-margin}
+[Note 1](./cs229-2018-autumn/notes/cs229-notes1.pdf), p. 8
+::::
+
+<!--  -->
+::::{.callout-note .my-callout title="TODO" icon=false collapse=true}
+Note 1 trace properties
+:::: 
+
+::: {.callout-tip .my-callout title="Lecture 2 - Matrix derivate" icon=false collapse=false}
+$$\bm A \in \mathbb R^{2\times 2}$$ 
+$$f : \mathbb R^{2\times 2} \mapsto \mathbb R$$
 $$
 \nabla_{\bm A}f(\bm A) = 
 \begin{bmatrix}
@@ -394,112 +452,165 @@ $$
 \end{bmatrix}
 $$
 
-
 $J(\bm\theta)$ is minimum when $\nabla_{\bm\theta} J(\bm\theta) = \vec{0}$.  
-Minimize $J(\bm\theta)$ by solving $\nabla_{\bm\theta} J(\bm\theta) = \vec{0}$ for $\bm\theta$.  
+Minimize $J(\bm\theta)$ by solving $\nabla_{\bm\theta} J(\bm\theta) = \vec{0}$.  
+:::
 
+:::{.column-margin}
+[Lecture 2@1:00:02](https://youtu.be/4b4MUYve_U8?si=wQGqaMwfErzCM6So&t=3602)
+:::
+
+
+::: {.callout-tip .my-callout title="Lecture 2 - Trace operation" icon=false collapse=false}
+$$
+\begin{align*}
+\bm A &\in \mathbb R^{n\times n}  \\
+\text{tr}(\bm A) &= \sum_{i=1}^n A_{ii} \\
+\operatorname{tr}(\bm A) &= \operatorname{tr}(\bm A^T) \\
+\nabla_{\bm A}\operatorname{tr}(\bm A \bm B) &= \bm B^T \\
+\operatorname{tr}(\bm A \bm B) &= \operatorname{tr}(\bm B \bm A) \\
+\operatorname{tr}(\bm A\bm B \bm C) &= \operatorname{tr}(\bm C \bm A \bm B) \\
+\nabla_{\bm A}\operatorname{tr}(\bm A\bm B\bm A^T\bm C) &= \bm C\bm A\bm B + \bm C^T\bm A\bm B^T \\
+\nabla_{\bm A}\operatorname{tr}(\bm A\bm A^T\bm C) &= \bm C\bm A + \bm C^T\bm A \\
+\end{align*}
+$$
+:::
+
+:::{.column-margin}
 [Lecture 2@1:03:42](https://youtu.be/4b4MUYve_U8?si=zoAsvcX1FLkZ1rKQ&t=3822)  
+:::
 
-$\text{tr}\bm A^{n\times n} = \sum_{i=1}^n A_{ii}    $  
-$\text{tr}\bm A = \text{tr}\bm A^T                   $  
-$\nabla_{\bm A}\text{tr}\bm A \bm B = \bm B^T        $  
-$\text{tr}\bm A \bm B = \text{tr}\bm B \bm A         $  
-$\text{tr}\bm A\bm B\bm C = \text{tr}\bm C\bm A \bm B$  
-$\nabla_{\bm A}\text{tr}\bm A\bm A^T\bm C = \bm C\bm A + \bm C^T\bm A$
-
-
-
-1:15:44
-
-<details>
-<summary>Proof of $\text{tr}\bm A \bm B = \text{tr}\bm B \bm A$</summary>
-
+::::{.callout-warning .my-callout title="Proof" icon=false collapse=true}
+Prove $\operatorname{tr}(\bm A \bm B) = \operatorname{tr}(\bm B \bm A)$.
 
 $$
 \begin{align*}
-\text{tr}\bm A \bm B &= \sum_{i=1}^n A_{1i}B_{i1} + \sum_{i=1}^n A_{2i}B_{i2} + \cdots + \sum_{i=1}^n A_{ni}B_{in} \\
-                     &= \sum_{j=1}^n \sum_{i=1}^n A_{ji}B_{ij} \\
-\text{tr}\bm B \bm A &= \sum_{j=1}^n B_{1j}A_{j1} + \sum_{i=j}^n B_{2j}A_{j2} + \cdots + \sum_{j=1}^n B_{nj}A_{jn} \\
-                     &= \sum_{i=1}^n \sum_{j=1}^n B_{ji}A_{ji} = \sum_{j=1}^n \sum_{i=1}^n A_{ji}B_{ij} \\
-\text{tr}\bm A \bm B &= \text{tr}\bm B \bm A
+\operatorname{tr}(\bm A \bm B) &= \sum_{i=1}^n A_{1i}B_{i1} + \sum_{i=1}^n A_{2i}B_{i2} + \cdots + \sum_{i=1}^n A_{ni}B_{in} \\
+                               &= \sum_{j=1}^n \sum_{i=1}^n A_{ji}B_{ij} \\
+\operatorname{tr}(\bm B \bm A) &= \sum_{j=1}^n B_{1j}A_{j1} + \sum_{i=j}^n B_{2j}A_{j2} + \cdots + \sum_{j=1}^n B_{nj}A_{jn} \\
+                               &= \sum_{i=1}^n \sum_{j=1}^n B_{ji}A_{ji} = \sum_{j=1}^n \sum_{i=1}^n A_{ji}B_{ij} \\
+\operatorname{tr}(\bm A \bm B) &= \sum_{j=1}^n \sum_{i=1}^n A_{ji}B_{ij} = \operatorname{tr}(\bm B \bm A)
 \end{align*}
 $$
-
-</details>
-
+::::
 
 
+## Least squares revisited
+* design matrix, $X$
+* normal equation
+* pseudo inverse
+* $\bm{\theta} = (\bm{X}^T\bm{X})^{-1}\bm{X}^T\bm{y}$
 
-[Note 1](./cs229-2018-autumn/notes/cs229-notes1.pdf), p. 8, details  
-
-
-[Lecture 2@1:07:54](https://youtu.be/4b4MUYve_U8?si=XGgKoLo0kARmTkHq&t=4074)
-
-
-
+<!-- -->
+::::{.callout-tip .my-callout title="Lecture 2" icon=false collapse=false}
 $$
 \bm X\bm\theta = \begin{bmatrix}
 x^{(1)}_0 & x^{(1)}_1 & x^{(1)}_2 \\
 x^{(2)}_0 & x^{(2)}_1 & x^{(2)}_2 \\
 x^{(3)}_0 & x^{(3)}_1 & x^{(3)}_2 \\
+x^{(4)}_0 & x^{(4)}_1 & x^{(4)}_2 \\
 \end{bmatrix} \begin{bmatrix}
 \theta_0 \\
 \theta_1 \\
 \theta_2 \\
 \end{bmatrix} = \begin{bmatrix}
-(\bm x^{(1)})^T \bm\theta\\
-(\bm x^{(2)})^T \bm\theta\\
-(\bm x^{(3)})^T \bm\theta\\
-\end{bmatrix} = \begin{bmatrix}
-h_{\bm\theta}(\bm x^{(1)}) \\
-h_{\bm\theta}(\bm x^{(2)}) \\
-h_{\bm\theta}(\bm x^{(3)}) \\
+(\bm x^{(1)})^T\\
+(\bm x^{(2)})^T\\
+(\bm x^{(3)})^T\\
+(\bm x^{(4)})^T\\
+\end{bmatrix} \bm\theta = \begin{bmatrix}
+h^{(1)} \\
+h^{(2)} \\
+h^{(3)} \\
+h^{(4)} \\
 \end{bmatrix}
 $$
 $$
 \bm X\bm\theta -\bm y = \begin{bmatrix}
-h_{\bm\theta}(\bm x^{(1)}) - y^{(1)} \\
-h_{\bm\theta}(\bm x^{(2)}) - y^{(2)} \\
-h_{\bm\theta}(\bm x^{(3)}) - y^{(3)} \\
+h^{(1)} - y^{(1)} \\
+h^{(2)} - y^{(2)} \\
+h^{(3)} - y^{(3)} \\
+h^{(4)} - y^{(4)} \\
 \end{bmatrix}
 $$
+::::
 
-[Lecture 2@1:11:12](https://youtu.be/4b4MUYve_U8?si=t5XUoooWbY3aXYMK&t=4272)
+:::{.column-margin}
+[Lecture 2@1:07:54](https://youtu.be/4b4MUYve_U8?si=XGgKoLo0kARmTkHq&t=4074)
+:::
+
 
 $$
 \begin{align*}
-J(\bm\theta) &= \frac{1}{2}\sum_{i=1}^{m}(h_\theta(\bm{x}^{(i)}) - y^{(i)})^2 \\
+J(\bm\theta) &= \frac{1}{2}\sum_{i=1}^{m}(h^{(i)} - y^{(i)})^2 \\
              &= \frac{1}{2}(\bm X\bm\theta - \bm y)^T(\bm X\bm\theta - \bm y)
 \end{align*}
 $$
 
+:::{.column-margin}
+[Lecture 2@1:11:12](https://youtu.be/4b4MUYve_U8?si=t5XUoooWbY3aXYMK&t=4272)
+:::
 
+
+
+::: {.callout-note .my-callout title="$\nabla_{\bm\theta} J(\bm\theta) = \bm{X}^T\bm{X}\theta - \bm{X}^T\bm{y}$" icon=false collapse=true}
+$$
+\begin{align*}
+\nabla_{\bm\theta} J(\bm\theta) &= \nabla J(\bm\theta) \\
+&= \frac{1}{2}\nabla(\bm X\bm\theta - \bm y)^T(\bm X\bm\theta - \bm y) \\
+&= \frac{1}{2}\nabla(\bm\theta^T\bm X^T - \bm y^T)(\bm X\bm\theta - \bm y) \\
+&= \frac{1}{2}\nabla(\bm\theta^T\bm X^T\bm X\bm\theta - \bm\theta^T\bm X^T\bm y - 
+\bm y^T\bm X\bm\theta + \bm y^T\bm y) \\
+&= \frac{1}{2}\nabla(\bm\theta^T\bm X^T\bm X\bm\theta - \bm\theta^T\bm X^T\bm y - 
+\bm y^T\bm X\bm\theta) \quad \footnotesize \bm y^T\bm y \ \text{is not a function of}\ \theta\\
+&= \frac{1}{2}\nabla\operatorname{tr}(\bm\theta^T\bm X^T\bm X\bm\theta - \bm\theta^T\bm X^T\bm y - 
+\bm y^T\bm X\bm\theta) \quad \text{\footnotesize \# scalar = trace of a scalar} \\
+&= \frac{1}{2}\nabla\operatorname{tr}(\bm\theta^T\bm X^T\bm X\bm\theta) - \frac{1}{2}\nabla\operatorname{tr}(\bm\theta^T\bm X^T\bm y + \bm y^T\bm X\bm\theta) \quad \text{\footnotesize \# re-group}\\
+&= \frac{1}{2}\nabla\operatorname{tr}(\bm\theta^T\bm X^T\bm X\bm\theta) - \nabla\operatorname{tr}(\bm y^T\bm X\bm\theta) \quad \footnotesize \#\ \operatorname{tr}(A) = \operatorname{tr}(\bm A^T)\\
+&= \bm{X}^T\bm{X}\theta - \bm{X}^T\bm{y} \quad \footnotesize \#\ \text{see details below} \\ 
+\end{align*}
+$$
+:::
+
+:::{.column-margin}
 [Lecture 2@1:13:16](https://youtu.be/4b4MUYve_U8?si=HZb_uHJVLOCVx3jo&t=4396)
+:::
+
+::::{.callout-note .my-callout title="Details" icon=false collapse=true}
+$$
+\begin{align*}
+\frac{1}{2}\nabla\operatorname{tr}(\bm\theta^T\bm X^T\bm X\bm\theta) 
+&= \frac{1}{2}\nabla\operatorname{tr}(\bm\theta\bm\theta^T\bm X^T\bm X) \quad\footnotesize\#\ \operatorname{tr}(ABC) = \operatorname{tr}(CAB)\\
+&= \frac{1}{2}(\bm X^T\bm{X\theta} + \bm{X}^T\bm{X}\theta) \quad\footnotesize\#\ \nabla_A tr A A^T C = CA + C^TA\\
+&= \bm X^T\bm{X\theta}\\
+\\
+\nabla\operatorname{tr}(\bm y^T\bm X\bm\theta) 
+&= \nabla\operatorname{tr}(\bm{\theta}\bm{y}^T\bm{X}) \quad\footnotesize\#\ \operatorname{tr}(ABC) = \operatorname{tr}(CAB)\\
+&= \bm{X}^T\bm{y} \quad\footnotesize\#\ \nabla_A\operatorname{tr}(AB) = B^T \\
+\end{align*}
+$$
+::::
+
+$J(\bm\theta)$ is at minimum when $\nabla J(\bm\theta) = 0.$
 
 $$
 \begin{align*}
-\nabla_{\bm\theta} J(\bm\theta) 
-&= \frac{1}{2}\nabla_{\bm\theta}(\bm X\bm\theta - \bm y)^T(\bm X\bm\theta - \bm y) \\
-&= \frac{1}{2}\nabla_{\bm\theta}(\bm\theta^T\bm X^T - \bm y^T)(\bm X\bm\theta - \bm y) \\
-&= \frac{1}{2}\nabla_{\bm\theta}(\bm\theta^T\bm X^T\bm X\bm\theta - \bm\theta^T\bm X^T\bm y - 
-\bm y^T\bm X\bm\theta + \bm y^T\bm y)
+\nabla J(\bm\theta) = &\bm{X}^T\bm{X}\theta - \bm{X}^T\bm{y} = 0\\
+&\bm{X}^T\bm{X}\theta = \bm{X}^T\bm{y} \\
+\\
+&\bm{\theta} = (\bm{X}^T\bm{X})^{-1}\bm{X}^T\bm{y} \\
 \end{align*}
-$$
+$$ 
+
+# DISCUSSION 1
+* Linear Algebra Review and Reference
+* [cs229-2018-autumn/section/cs229-linalg.pdf](./cs229-2018-autumn/section/cs229-linalg.pdf)
 
 
 
-
-### Least squares revisited
-* design matrix, $X$
-* normal equation
-* from equation (5), let $B= I$, $\nabla_A tr A A^T C = CA + C^TA$
-* pseudo inverse
-
-
-
-☐ [Discussion Section: Linear Algebra](./cs229-2018-autumn/section/cs229-linalg.pdf)
-
-☐ [Lecture 3](https://www.youtube.com/watch?v=het9HFqo1TQ&list=PLoROMvodv4rMiGQp3WXShtMGgzqpfVfbU&index=3)
+# LECTURE 3
+* 2018-10-01
+* [https://youtu.be/het9HFqo1TQ?si=D7whfKL91tddccLg](https://youtu.be/het9HFqo1TQ?si=D7whfKL91tddccLg)
 
 
 * Outline
@@ -516,11 +627,7 @@ $$
 * $J(\theta) = \frac{1}{2}\sum_{i=1}^{m}(h_\theta(x^{(i)}) - y^{(i)})^2$
 
 
-
-
-## Locally weighted linear regression
-[Lecture 3](https://www.youtube.com/watch?v=het9HFqo1TQ&list=PLoROMvodv4rMiGQp3WXShtMGgzqpfVfbU&index=3)
-
+# Locally weighted linear regression
 * Parametric learning algorithm
   * Fit fixed set of parameters, $\theta_i$, to data
 * Non-parametric learning algorithm
@@ -530,7 +637,7 @@ $$
 
 
 
-## Probabilistic interpretation
+# Probabilistic interpretation
 * [Lecture 3](https://youtu.be/het9HFqo1TQ?si=sUg0Q37jlcdvrjyN), Time: 21:56
 * Why least square error?
 * Normal distribution in terms of $\theta$, Time: 29:15
