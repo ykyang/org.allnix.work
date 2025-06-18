@@ -354,3 +354,9 @@ main {
     .illustration {
       border: 1px solid #dee2e6;
     }
+
+/* https://github.com/quarto-dev/quarto-cli/discussions/2847 */
+.callout {
+  margin-top: 0.0em; /* 1.25rem by default */
+  margin-bottom: 1.0em; /* 1.25rem by default */
+}

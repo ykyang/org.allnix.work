@@ -1,4 +1,6 @@
 ---
+# Use README.md not README.qmd
+# Due to bug in the outline of Code
 format:
   html:
     toc: true
@@ -50,13 +52,15 @@ quarto render README.qmd --to html
 
 
 ::::{.callout-note .my-callout title="Table of content" icon=false collapse=true}
+**Supervised Learning**
+
 * `Part I` [Linear Regression](#linear-regression)
     * `1` [LMS algorithm](#lms-algorithm)
     * `2` [The normal equations](#the-normal-equations)
         * `2.1` [Matrix derivatives](#matrix-derivatives)
         * `2.2` [Least squares revisited](#least-squares-revisited)
     * `3` Probabilistic interpretation
-    * `4` Locally weighted linear regression
+    * `4` [Locally weighted linear regression](#locally-weighted-linear-regression)
 * `Part II` Classification and Logistic Regression
     * `5` Logistic regression
     * `6` Digression: The perceptron learning algorithm
@@ -602,6 +606,21 @@ $$
 \end{align*}
 $$ 
 
+::::{.callout-note .my-callout title="Normal equations naming reason" icon=false collapse=false}
+* See [WPI Handout](https://users.wpi.edu/~walker/MA3257/HANDOUTS/least-squares_handout.pdf)
+
+Normal equations are call normal equations is because
+
+$$
+\begin{align*}
+\bm{X}^T\bm{X}\theta - \bm{X}^T\bm{y} = 0 \\
+\bm{X}^T(\bm{X}\theta - \bm{y}) = 0 \\
+\end{align*}
+$$
+
+$(\bm{X}\theta - \bm{y})$ is orthogonal to $\bm{X}^T$.
+::::
+
 # DISCUSSION 1
 * Linear Algebra Review and Reference
 * [cs229-2018-autumn/section/cs229-linalg.pdf](./cs229-2018-autumn/section/cs229-linalg.pdf)
@@ -614,35 +633,83 @@ $$
 
 
 * Outline
-    * Linear regression
-    * Locally weighted regression
+    * Recap of linear regression
+    * Locally weighted linear regression
     * Probabilistic interpretation
     * Logistic regression
     * Newton's method
 
-* $(x^(i),y^(i))$ ith example
-* $x^{(i)} \in \R^{n+1}, x_0 = 1$, $y^{(i)} \in \R$
-* m = # example, n = # features
-* $h_\theta(x) = \sum_{j=0}^n \theta_j x_j = \theta^Tx$
-* $J(\theta) = \frac{1}{2}\sum_{i=1}^{m}(h_\theta(x^{(i)}) - y^{(i)})^2$
+**Recap of linear regression**
 
+:::{.column-margin}
+[Lecture 3@1:26](https://youtu.be/het9HFqo1TQ?si=-zl8bI7wKl-bW_za&t=86)
+:::
+
+* $(x^{(i)},y^{(i)})$, the i^th^ example
+* $\bm{x}^{(i)} \in \R^{n+1}, x^{(i)}_0 = 1$
+* $y^{(i)} \in \R$
+* m = # example
+* n = # features
+* $h(\bm{x}) = \sum_{j=0}^n \theta_j x_j = \theta^Tx$
+* $J(\theta) = \frac{1}{2}\sum_{i=1}^{m}(h(\bm{x}^{(i)}) - y^{(i)})^2$
+
+
+
+Feature selection algorithm will be introduced
+
+:::{.column-margin}
+[Lecture 3@2:23](https://youtu.be/het9HFqo1TQ?si=-zl8bI7wKl-bW_za&t=143)
+:::
 
 # Locally weighted linear regression
-* Parametric learning algorithm
-  * Fit fixed set of parameters, $\theta_i$, to data
-* Non-parametric learning algorithm
-  * Amount of data/parameters need to keep grows linearly with the size of the data
+
+:::{.column-margin}
+[Lecture 3@5:55](https://youtu.be/het9HFqo1TQ?si=-zl8bI7wKl-bW_za&t=355)
+:::
+
+* [Note 1](./cs229-2018-autumn/notes/cs229-notes1.pdf), p. 13
+* LWR
 
 
+**Parametric** learning algorithm
+
+* un-weighted
+* Fit fixed set of parameters $(\theta_i)$ to data
+
+$$
+J(\bm\theta) = \frac{1}{2}\sum_{i=1}^{m}(h^{(i)} - y^{(i)})^2
+$$
+
+**Non-parametric** learning algorithm
+
+* weighted
+* Amount of data/parameters need to keep grows linearly with the size of the data
+
+$$
+J(\bm\theta) = \frac{1}{2}\sum_{i=1}^{m}w^{(i)}(h^{(i)} - y^{(i)})^2
+$$
+
+One choice for the weight is
+$$
+w^{(i)} = exp\left({\frac{-(x^{(i)}-x)^T(x^{(i)}-x)}{2\tau^2}}\right)
+$$
+
+* $\tau$, bandwidth
 
 
 
 # Probabilistic interpretation
-* [Lecture 3](https://youtu.be/het9HFqo1TQ?si=sUg0Q37jlcdvrjyN), Time: 21:56
-* Why least square error?
-* Normal distribution in terms of $\theta$, Time: 29:15
-* Central limit theorem, Time: 35:56
-* Maximum likelihood estimation, Time: 41:03
+:::{.column-margin}
+[Lecture 3@21:56](https://youtu.be/het9HFqo1TQ?si=-zl8bI7wKl-bW_za&t=1316)
+:::
+
+* Why linear regression?
+* Why least square cost function?  
+* Least square regression could be derived from a set of probabilistic assumption.
+* Normal distribution in terms of $\theta$, [Lecture 3@29:15](https://youtu.be/het9HFqo1TQ?si=-zl8bI7wKl-bW_za&t=1755)
+* Central limit theorem, [Lecture 3@35:56](https://youtu.be/het9HFqo1TQ?si=-zl8bI7wKl-bW_za&t=2156)
+* Maximum likelihood estimation, [Lecture 3@41:03](https://youtu.be/het9HFqo1TQ?si=-zl8bI7wKl-bW_za&t=2463)
+
 
 
 
