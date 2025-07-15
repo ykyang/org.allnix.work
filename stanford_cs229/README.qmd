@@ -1,9 +1,8 @@
 ---
-# Use README.md not README.qmd
-# Due to bug in the outline of Code
 format:
   html:
     toc: true
+    toc-expand: true
     html-math-method: katex
 #    html-math-method: mathjax
 #    html-math-method: mathml
@@ -22,13 +21,13 @@ quarto preview README.qmd --to html --no-browser
 quarto render README.qmd --to html
 -->
 
-<font size="7">MY CS229</font>
+<font size="10">MY CS229</font>
 
 # Logistics
 
 <!--
 :::
-REMOVE BEFORE RENDER
+DO NOT REMOVE
 :::
 -->
 ::::{.callout-note .my-callout title="Class material" icon=false collapse=true}
@@ -40,7 +39,7 @@ REMOVE BEFORE RENDER
 
 <!--
 :::
-REMOVE BEFORE RENDER
+DO NOT REMOVE
 :::
 -->
 ::::{.callout-note .my-callout title="Class timeline" icon=false collapse=true}
@@ -64,7 +63,7 @@ REMOVE BEFORE RENDER
 
 <!--
 :::
-REMOVE BEFORE RENDER
+DO NOT REMOVE
 :::
 -->
 ::::{.callout-note .my-callout title="Table of content" icon=false collapse=true}
@@ -91,7 +90,7 @@ REMOVE BEFORE RENDER
 
 <!--
 :::
-REMOVE BEFORE RENDER
+DO NOT REMOVE
 :::
 -->
 ::::{.callout-tip .my-callout title="Lecture 1" icon=false collapse=true}
@@ -126,7 +125,7 @@ such that $h \approx y$.
 
 <!--
 :::
-REMOVE BEFORE RENDER
+DO NOT REMOVE
 :::
 -->
 ::::{.callout-tip .my-callout title="Lecture 1 - Five topics" icon=false collapse=true}
@@ -176,7 +175,7 @@ Choose $\theta$ such that $h \approx y$.
 -->
 <!--
 :::
-REMOVE BEFORE RENDER
+DO NOT REMOVE
 :::
 -->
 :::: {.callout-note .my-callout title="Example" icon=false collapse=false}
@@ -252,7 +251,7 @@ $$
 
 <!--
 :::
-REMOVE BEFORE RENDER
+DO NOT REMOVE
 :::
 -->
 ::::{.callout-tip .my-callout title="Lecture 2" icon=false collapse=true}
@@ -284,7 +283,7 @@ where
 
 <!--
 :::
-REMOVE BEFORE RENDER
+DO NOT REMOVE
 :::
 -->
 ::::{.callout-tip .my-callout title="Lecture 2" icon=false collapse=true}
@@ -323,7 +322,7 @@ Batch gradient descent could be **slow with large data set**.
 
 <!--
 :::
-REMOVE BEFORE RENDER
+DO NOT REMOVE
 :::
 -->
 ::::{.callout-note .my-callout title="Batch gradient descent" icon=false collapse=false}
@@ -340,7 +339,7 @@ $$
 
 <!--
 :::
-REMOVE BEFORE RENDER
+DO NOT REMOVE
 :::
 -->
 ::::{.callout-note .my-callout title="Batch gradient descent in Julia" icon=false collapse=false}
@@ -370,7 +369,7 @@ end
 
 <!--
 :::
-REMOVE BEFORE RENDER
+DO NOT REMOVE
 :::
 -->
 ::::{.callout-tip .my-callout title="Lecture 2" icon=false collapse=true}
@@ -380,7 +379,7 @@ Try $\alpha$ by $0.01, 0.02, 0.04, 0.08 \ldots$.
 ::::
 <!--
 :::
-REMOVE BEFORE RENDER
+DO NOT REMOVE
 :::
 -->
 ::::{.callout-caution .my-callout title="TODO" icon=false collapse=true}
@@ -424,7 +423,7 @@ Stochastic gradient descent is **faster** than batch gradient descent.
 
 <!--
 :::
-REMOVE BEFORE RENDER
+DO NOT REMOVE
 :::
 -->
 ::::{.callout-note .my-callout title="Stochastic gradient descent" icon=false collapse=false}
@@ -446,7 +445,7 @@ The learning rate, $\alpha$, could be reduced over time.
 
 <!--
 :::
-REMOVE BEFORE RENDER
+DO NOT REMOVE
 :::
 -->
 ::: {.callout-note .my-callout title="Stochastic gradient descent in Julia" icon=false collapse=false}
@@ -479,7 +478,7 @@ end
 
 <!--
 :::
-REMOVE BEFORE RENDER
+DO NOT REMOVE
 :::
 -->
 ::: {.callout-note .my-callout title="$\nabla_{\bm\theta} J(\bm\theta)$" icon=false collapse=false}
@@ -496,7 +495,7 @@ $$
 :::
 <!--
 :::
-REMOVE BEFORE RENDER
+DO NOT REMOVE
 :::
 -->
 ::: {.callout-note .my-callout title="Example" icon=false collapse=true}
@@ -521,7 +520,7 @@ equations.
 
 <!--
 :::
-REMOVE BEFORE RENDER
+DO NOT REMOVE
 :::
 -->
 ::::{.callout-note .my-callout title="TODO" icon=false collapse=true}
@@ -529,7 +528,7 @@ Note 1 trace properties
 :::: 
 <!--
 :::
-REMOVE BEFORE RENDER
+DO NOT REMOVE
 :::
 -->
 ::::{.callout-tip .my-callout title="Lecture 2 - Matrix derivate" icon=false collapse=false}
@@ -553,7 +552,7 @@ Minimize $J(\bm\theta)$ by solving $\nabla_{\bm\theta} J(\bm\theta) = \vec{0}$.
 
 <!--
 :::
-REMOVE BEFORE RENDER
+DO NOT REMOVE
 :::
 -->
 ::::{.callout-tip .my-callout title="Lecture 2 - Trace operation" icon=false collapse=false}
@@ -577,7 +576,7 @@ $$
 
 <!--
 :::
-REMOVE BEFORE RENDER
+DO NOT REMOVE
 :::
 -->
 ::::{.callout-warning .my-callout title="Proof" icon=false collapse=true}
@@ -603,7 +602,7 @@ $$
 
 <!--
 :::
-REMOVE BEFORE RENDER
+DO NOT REMOVE
 :::
 -->
 ::::{.callout-tip .my-callout title="Lecture 2" icon=false collapse=false}
@@ -658,7 +657,7 @@ $$
 
 <!--
 :::
-REMOVE BEFORE RENDER
+DO NOT REMOVE
 :::
 -->
 ::::{.callout-note .my-callout title="$\nabla_{\bm\theta} J(\bm\theta) = \bm{X}^T\bm{X}\theta - \bm{X}^T\bm{y}$" icon=false collapse=true}
@@ -686,7 +685,7 @@ $$
 
 <!--
 :::
-REMOVE BEFORE RENDER
+DO NOT REMOVE
 :::
 -->
 ::::{.callout-note .my-callout title="Details" icon=false collapse=true}
@@ -705,7 +704,7 @@ $$
 ::::
 <!--
 :::
-REMOVE BEFORE RENDER
+DO NOT REMOVE
 :::
 -->
 
@@ -722,7 +721,7 @@ $$
 
 <!--
 :::
-REMOVE BEFORE RENDER
+DO NOT REMOVE
 :::
 -->
 ::::{.callout-note .my-callout title="Normal equations naming reason" icon=false collapse=false}

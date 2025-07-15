@@ -1,6 +1,5 @@
 ---
-# Use README.md not README.qmd
-# Due to bug in the outline of Code
+# Deprecated
 format:
   html:
     toc: true
