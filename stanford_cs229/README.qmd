@@ -23,7 +23,7 @@ quarto render README.qmd --to html
 
 <font size="10">MY CS229</font>
 
-# **Supervised Learning**
+# **SUPERVISED LEARNING**
 
 <!--
 :::
@@ -65,7 +65,7 @@ DO NOT REMOVE
     * `3` [Probabilistic interpretation](#probabilistic-interpretation)
     * `4` [Locally weighted linear regression](#locally-weighted-linear-regression)
 * `Part II` [Classification and Logistic Regression](#classification-and-logistic-regression)
-    * `5` Logistic regression
+    * `5` [Logistic regression](#logistic-regression)
     * `6` Digression: The perceptron learning algorithm
     * `7` Another algorithm for maximizing $l(\theta)$
 * `Part III` [Generalized Linear Models](#generalized-linear-models)
@@ -783,15 +783,21 @@ $$
 
 
 [Lecture-3 @ 43:36](https://youtu.be/het9HFqo1TQ?si=NBActVemQDQQ6RyJ&t=2616){target="_blank"}
+[Note 1](./cs229-2018-autumn/notes/cs229-notes1.pdf), p. 16
 
 # **Classification and logistic regression**
 
+binary classification  
+0 negative class  
+1 positive class  
+y label 
 
 [Lecture-3 @ 45:58](https://youtu.be/het9HFqo1TQ?si=NBActVemQDQQ6RyJ&t=2758){target="_blank"}
 
 TODO: definition of $h$
 
 # Logistic regression
+* $y \in \{0,1\}$
 * Want $h_\theta(x) \in [0,1]$
 * Batch gradient descent, Time: 1:02:09
 
