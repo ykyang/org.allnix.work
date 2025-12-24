@@ -36,6 +36,11 @@ clang-cl hello.c -o hello
 
 2.1 Grammar
 
+Special words, Punctuation, Comments, Literals, Identifiers, Functions, Operators,
+Attributes
 
+TODO 
+
+2.2 Declarations
 
 
