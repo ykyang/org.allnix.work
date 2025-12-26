@@ -36,11 +36,44 @@ clang-cl hello.c -o hello
 
 2.1 Grammar
 
-Special words, Punctuation, Comments, Literals, Identifiers, Functions, Operators,
-Attributes
+Special words, Punctuation, Comments, Literals, 
 
-TODO 
+* Identifiers: `argc`, `A`, `printf`
+* Functions: `main()`, `printf()`
+* Operators: `=`, `<`
+* Attributes: `[[maybe_unused]]`
 
 2.2 Declarations
 
+* `apropos`
+* `man 3 printf`
+
+2.3 Definitions
+
+Designated initializer
+```c
+double A[5] = {
+    [0] = 9.0, [1] = 2.9,
+    [4] = 3.0e25,
+    [3] = 0.00007,
+};
+```
+
+2.4 Statements
+
+Level 1: Acquaintance and Buckle up
+
+```c
+char const* const path_name[[deprecated]];
+```
+
+3.1 Conditional execution
+
+controlling expression, secondary block
+
+3.2 Iterations
+
+Heron approximation
+
+3.3 Multiple selection
 
