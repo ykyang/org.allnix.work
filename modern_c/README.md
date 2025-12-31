@@ -77,3 +77,36 @@ Heron approximation
 
 3.3 Multiple selection
 
+4.1 Operands and operators
+
+4.2 Arithmetic
+
+overflow, wraps around the range of the type
+
+4.3 Operators that modify objects
+
+4.4 Boolean context
+
+comparisons and logical evaluation
+
+5.1 The abstract state machine
+
+5.2 Basic types
+
+* unsigned integer
+* signed integer
+* real floating-point number
+* complex floating-point number
+
+5.3 Specifying values
+
+* Decimal integer: `123 = 123`
+* Octal integer: `037 = 63`
+* Hexadecimal integer: `0xffff = 65535`
+* Binary integer: `0b1010 = 10`
+* Decimal floating-point: `1.7e-3 = 0.0017`
+* Hexadecimal floating-point: `0x1.7aP-3 = 0.18457`
+* Integer character: `a`
+* String: "hello"
+
+TODO 5.4 Implicit conversions
