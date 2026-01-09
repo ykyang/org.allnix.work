@@ -110,3 +110,42 @@ comparisons and logical evaluation
 * String: "hello"
 
 TODO 5.4 Implicit conversions
+
+5.5 Initializers
+
+```c
+    // PRIuPTR is a portable printf specifier see inttypes.h
+    double a = {}; // a == 0
+    double c = {7.8};
+    double A[] = {3, }; printf("Length of A: %" PRIuPTR "\n", sizeof(A)/sizeof(double));
+    double B[3] = {1, 2, 3}; printf("Length of B: %" PRIuPTR "\n", sizeof(B)/sizeof(double));
+    double C[] = {[0]=6, [3] = 1,}; printf("Length of C: %" PRIuPTR "\n", sizeof(C)/sizeof(double));
+```
+
+5.6 Named constants
+
+**Compound literals**
+
+```c
+# define CORVID_NAME /**/         \
+(char const*const[corvid_num]){   \
+  [chough] = "chough",            \
+  [raven] = "raven",              \
+  [magpie] = "magpie",            \
+  [jay] = "jay",                  \
+}
+```
+
+**The `constexpr` construct**
+
+```c
+# define CORVID_NAMES /**/         \
+(constexpr char[8][corvid_num]){   \
+  [chough] = "chough",             \
+  [raven] = "raven",               \
+  [magpie] = "magpie",             \
+  [jay] = "jay",                   \
+}
+```
+
+TODO 5.7 Binary representations
