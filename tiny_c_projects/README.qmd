@@ -7,9 +7,11 @@ quarto preview c:/Users/yi-kun.yang/work/org.allnix.work/tiny_c_projects/README.
 * [C for Dummies](https://c-for-dummies.com/blog/)
 
 
-## 2. Daily greetings
+# 2 Daily greetings
 
 * `ps -p $$`, where `$$` is one of the parameter expansion in bash
+
+## 2.2
 
 ### 2.2.1 Coding a greeting
 ```c
@@ -126,11 +128,38 @@ int main() {
 ### 2.5.2 Randomly reading a pithy phrase
 ```c
 // Listing 2.8, page 33
-// pithy01.c
-// pithy02.c, page 34
-// pithy03.c, page 34
+// pithy01.c, page 33: Read file, print and close
+// pithy02.c, page 34: Allocate memory for one line of text
+// pithy03.c, page 34: Save all text into list_base
+// pithy04.c, page 36: Increase the size of list_base if necessary
+// pithy05.c, page 37: Print one random pithy
 ```
 
+* `realloc()`
 
----
-**Anchor**
+### 2.5.3 Adding the phrase to your greeting code
+
+# 3 NATO output
+
+## 3.1 The NATO alphabet
+```default
+A alfa       N November
+B Bravo      O Oscar
+C Charlie    P Papa
+D Delta      Q Quebec
+E Echo       R Romeo
+F Foxtrot    S Sierra
+G Golf       T Tango
+H Hotel      U Uniform
+I India      V Victor
+J Juliet     W Wiskey
+K Kilo       X X-Ray
+L Lima       Y Yankee
+M Mike       Z Zulu
+```
+## 3.2 The NATO translator program
+### 3.2.1
+```c
+// Listing 3.1, page 41
+// nato01.c, page 41
+```

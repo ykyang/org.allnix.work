@@ -31,6 +31,7 @@ int main() {
         }
         strcpy(entry, buf);
         printf("%d: %s", items, entry);
+        
         ++items;
     }
 

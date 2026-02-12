@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <errno.h>
 #include <string.h>
+#include <time.h>
 
 #define BSIZE 256
 
@@ -37,16 +38,24 @@ int main() {
             return EXIT_FAILURE;
         }
         strcpy(entry, buf);
+        //printf("%d: %s", items, entry); // moved to after file closing
         *(list_base + items) = entry;
-        
+
         ++items;
+        if (items % 100 == 0) {
+            list_base = (char **) realloc(list_base, sizeof(char *)*(items+100));
+            if (list_base == NULL) {
+                fprintf(stderr, "Unable to allocate memory\n");
+                return EXIT_FAILURE;
+            }       
+        }
     }
 
     fclose(fp);
 
-    for (int i = 0; i < items; i++) {
-        printf("%s", *(list_base+i));
-    }
+    srand(time(NULL));
+    int saying = rand() % (items-1);
+    printf("%s", *(list_base+saying));
     
     // No need to free memory since all is contained in main(), page 37.
     return EXIT_SUCCESS;

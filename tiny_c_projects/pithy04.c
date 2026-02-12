@@ -37,9 +37,17 @@ int main() {
             return EXIT_FAILURE;
         }
         strcpy(entry, buf);
+        //printf("%d: %s", items, entry); // moved to after file closing
         *(list_base + items) = entry;
-        
+
         ++items;
+        if (items % 100 == 0) {
+            list_base = (char **) realloc(list_base, sizeof(char *)*(items+100));
+            if (list_base == NULL) {
+                fprintf(stderr, "Unable to allocate memory\n");
+                return EXIT_FAILURE;
+            }       
+        }
     }
 
     fclose(fp);

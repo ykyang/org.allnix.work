@@ -32,6 +32,9 @@ add_executable(greet03 greet03.c)
 add_executable(greet04 greet04.c)
 add_executable(pithy01 pithy01.c)
 add_executable(pithy02 pithy02.c)
+add_executable(pithy03 pithy03.c)
+add_executable(pithy04 pithy04.c)
+add_executable(pithy05 pithy05.c)
 
 target_sources(greet01
   PRIVATE
