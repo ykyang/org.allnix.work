@@ -1,3 +1,7 @@
+DEPRECATED
+
+
+
 <!-- 
 quarto preview c:/Users/yi-kun.yang/work/org.allnix.work/tiny_c_projects/README.md --no-browser --no-watch-inputs
 -->

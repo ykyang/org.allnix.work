@@ -1,5 +1,8 @@
 <!-- 
 quarto preview c:/Users/yi-kun.yang/work/org.allnix.work/tiny_c_projects/README.md --no-browser --no-watch-inputs
+
+Open with "codium" from a Linux terminal.
+Use "cmake" to build executables.
 -->
 **PREFACE**
 
@@ -200,8 +203,43 @@ M Mike       Z Zulu
 ```
 
 ```c
-//Listing 3.7, page 48
+// Listing 3.7, page 48
 // nato05.c, based on nato04.c
 // Scan word by word instead of 64-character at a time
 // to avoid incomplete reading of a word
 ```
+
+# 4 Caesarean cipher
+* Caesarean cipher is not secure
+* streaming I/O
+* I/O filter
+* rotating character
+* shifting character
+* hex input filter
+* NATO phonetic filter
+* filter to find words
+
+## 4.1 I/O filters
+
+
+### 4.1.1 Understanding stream I/O
+```c
+// Listing 4.1, page 52
+// stream_demo.c
+// Demo the 2nd getchar() gets '\n' if 'a', '\n' were typed.
+//
+// Type 'a', '\n'
+//    a=a, b=\n
+// Type 'a', 'b', '\n'
+//    a=a, b=b
+```
+
+* `setbuf()`
+
+```c
+// Listing 4.2, page 53
+// buffering.c
+// No prompt due to the buffer setting, but still accepts input.
+```
+
+### 4.1.2 Writing a simple filter

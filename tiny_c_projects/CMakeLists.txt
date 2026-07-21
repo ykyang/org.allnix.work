@@ -24,8 +24,8 @@ if (WIN32)
     endif()
 endif()
 
-
-add_executable(greet01)
+## Chapter 1 and 2
+#add_executable(greet01 greet01.c)
 #add_executable(greet02 greet02.c)
 #add_executable(time01  time01.c)
 #add_executable(time02  time02.c)
@@ -37,16 +37,23 @@ add_executable(greet01)
 #add_executable(pithy04 pithy04.c)
 #add_executable(pithy05 pithy05.c)
 ## Chapter 3
-add_executable(nato01 nato01.c)
-add_executable(nato02 nato02.c)
-add_executable(word_parse01 word_parse01.c)
-add_executable(nato03 nato03.c)
-add_executable(nato04 nato04.c)
-add_executable(nato05 nato05.c)
+#add_executable(nato01 nato01.c)
+#add_executable(nato02 nato02.c)
+#add_executable(word_parse01 word_parse01.c)
+#add_executable(nato03 nato03.c)
+#add_executable(nato04 nato04.c)
+#add_executable(nato05 nato05.c)
+## Chapter 4
+add_executable(stream_demo stream_demo.c)
+add_executable(buffering   buffering.c  )
 
-target_sources(greet01
-  PRIVATE
-    greet01.c
-)
+
+
+## Another way to specify sources
+#add_executable(foobar)
+#target_sources(foobar
+#  PRIVATE
+#    foobar.c
+#)
 
 
