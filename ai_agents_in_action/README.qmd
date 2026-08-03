@@ -1,0 +1,58 @@
+## About this book
+- Chapter 1
+    - **Model Context Protocol**
+    - 5 functional layers make up an agent
+- Chapter 2
+	- Probabilistic token machines
+	- OpenAI Agents SDK
+- Chapter 3
+    - MCP -- USB-C for agents
+- Chapter 4
+    - Architectures of multi-agent systems
+- Chapter 5
+    - LLMs reason and plan
+    - Chain-of-thought (CoT)
+    - ReAct paradigm
+- Chapter 6
+    - Retrieval mechanism
+    - Source of knowledge
+    - Memory
+- Chapter 7
+    - Test-driven agent development (TDAD)
+    - Grounding and critic agents
+    - Phoenix
+- Chapter 8
+    - Strategies for consuming and deploying agents
+    - Deployment
+- Chapter 9 --- 3 Layers of the agentic loop
+    - Inner SPAL loop
+    - External task loop
+    - Collaboration agentic loops
+- Chapter 10 --- Cognition
+    - Concrete cognitive agent
+    - Metacognitive processes
+- Chapter 11 --- Tips
+    - Customer support agent
+    - RAG (retrieval-augmented generation) agent system
+    - Deep search agent
+    - Key components --- actions, memory, knowledge, reasoning, evaluation, planning, and feedback
+
+**Code**
+- [liveBook](https://livebook.manning.com/book/ai-agents-in-action-second-edition)
+- [Manning](https://www.manning.com/books/ai-agents-in-action-second-edition)
+- [github](https://github.com/cxbxmxcx/AI-Agent-Workflows)
+
+
+## 1. The rise of AI agents
+- Defining agents and agentic thinking
+- Introducing the Model Context Protocol
+- Understanding the agent foundational layers
+- Advancing to multi-agent systems
+
+AI agents are software that perceives its environment, decides what to do,
+and takes action to achieve a goal, using the resources provided by an LLM.
+
+### 1.1 Defining agents and agentic thinking
+#### TODO 1.1.1 Understanding agent, assistant, and LLM patterns
+
+
