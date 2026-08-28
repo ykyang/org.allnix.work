@@ -1,4 +1,7 @@
-## About this book
+<!--
+quarto render README.qmd --to html
+-->
+# About this book
 - Chapter 1
     - **Model Context Protocol**
     - 5 functional layers make up an agent
@@ -43,7 +46,7 @@
 - [github](https://github.com/cxbxmxcx/AI-Agent-Workflows)
 
 
-## 1. The rise of AI agents
+# 1. The rise of AI agents
 - Defining agents and agentic thinking
 - Introducing the Model Context Protocol
 - Understanding the agent foundational layers
@@ -52,61 +55,102 @@
 AI agents are software that perceives its environment, decides what to do,
 and takes action to achieve a goal, using the resources provided by an LLM.
 
-### 1.1 Defining agents and agentic thinking
-#### 1.1.1 Understanding agent, assistant, and LLM patterns
+## 1.1 Defining agents and agentic thinking
+### 1.1.1 Understanding agent, assistant, and LLM patterns
 - Figure 1.1 Common patterns
 - Table 1.1 Four LLM interaction patterns
 - Figure 1.2 Assistant vs. agent
 
-#### 1.1.2 Thinking like agents: Sense-plan-act-learn
+### 1.1.2 Thinking like agents: Sense-plan-act-learn
 - Table 1.2 Example goals
 - Tool chaining
 - Figure 1.3 SPAL: Sense → plan → act → learn
 
-#### 1.1.3 Agents act with tools
+### 1.1.3 Agents act with tools
 - Tool functions
 - Figure 1.4 Agent use tool function
 - Model Context Protocol (MCP)
 
-### 1.2 Introducing the Model Context Protocol
+## 1.2 Introducing the Model Context Protocol
 - MCP fundamentally changes how we build AI systems
 - Figure 1.5 Agent connect to MCP
 - MCP solve problems: (1) Inconsistent tool access, (2) Unreliable data 
 responses, (3) Fragmented integrations, (4) Code extensibility, (5) Implementation
 abstraction, (6) Easy to build, (7) Security and trust
 
-### 1.3 Understanding the five functional layers of an agent
+## 1.3 Understanding the five functional layers of an agent
 - The five primary functional layers of agents: (1) Persona, (2) Tools and 
 actions, (3) Reasoning and planning, (4) Knowledge and memory, (5) Evaluation and feedback
 - Figure 1.6 The five functional layers of agents
 
-#### 1.3.1 The agent persona
+### 1.3.1 The agent persona
 - System prompt: "You are a travel assistant ..."
 - Figure 1.7 Persona layer
 
-#### 1.3.2 Agent tools and actions
+### 1.3.2 Agent tools and actions
 - Figure 1.8
 
-#### 1.3.3 Agent reasoning and planning
+### 1.3.3 Agent reasoning and planning
 - Figure 1.9
 
-#### 1.3.4 Agent knowledge and memory
+### 1.3.4 Agent knowledge and memory
 - Most common memory is conversational memory
 - Retrieval-augmented generation (RAG)
 - Figure 1.10
 
-#### 1.3.5 Agent evaluation and feedback
+### 1.3.5 Agent evaluation and feedback
 - Figure 1.11
 
-### 1.4 Advancing to multi-agent systems
+## 1.4 Advancing to multi-agent systems
 Reasons for multi-agent systems: (1) Specialization, (2) Parallelism, (3) Context
 management, (4) Inherently multi-agent problems
 
-#### 1.4.1 The agent flow assembly line
+### 1.4.1 The agent flow assembly line
 - Figure 1.12 Agent flow pattern
 
-#### 1.4.2 Agent orchestrations (hub-and-spoke)
+### 1.4.2 Agent orchestrations (hub-and-spoke)
 - Figure 1.13 
 
-#### 1.4.3 Agent collaboration (teams of agents)
+### 1.4.3 Agent collaboration (teams of agents)
+- Figure 1.14
+
+## 1.5 Next steps
+Essential to modern agent development:
+
+- The Model Context Protocol (MCP)
+- Multi-agent systems
+
+Coordinated infrastructure:
+- How messages flow between agents
+- How state is managed across processes
+- How failure are handled
+
+# 2. Core components: Large Language models, prompting, and agents
+- Understanding large language models
+- Controlling LLMs with prompt engineering
+- Building an agent with OpenAI Agents
+- Enhancing agents through tool integration
+
+## 2.1 Understanding large language models
+### 2.1.1 LLMs: Probabilistic token machines
+- Figure 2.1
+- Back-propagation
+- Attention and feedforward (MLP) layers
+
+### 2.1.2 What is a token?
+- Figure 2.2
+
+### 2.1.3 Tuning temperature, top-p, and more
+- Figure 2.3
+- Table 2.1
+
+## 2.2 Controlling LLMs with prompt engineering (agent persona)
+
+### 2.2.1 Applying core prompt techniques
+- Table 2.2 Essential prompt techniques
+- Listing 2.1 Sample research agent prompt
+
+### 2.2.2 Thinking like an LLM
+- Figure 2.4 Example LLM workflow
+- Listing 2.2 TODO
 
