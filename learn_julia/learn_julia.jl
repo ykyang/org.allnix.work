@@ -8,6 +8,7 @@ module LearnJulia
 
 using Test
 import Serialization
+import InteractiveUtils
 
 ## Two different ways to document a struct.
 #
@@ -445,9 +446,9 @@ function learn_summarysize()
 end
 
 function learn_types()
-    supertype(Int64)
-    supertypes(Int64)
-    subtypes(Real)
+    Base.supertype(Int64)
+    InteractiveUtils.supertypes(Int64)
+    InteractiveUtils.subtypes(Real)
 end
 
 function learn_bin_oct_dec_hex_()
