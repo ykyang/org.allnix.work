@@ -152,5 +152,10 @@ Coordinated infrastructure:
 
 ### 2.2.2 Thinking like an LLM
 - Figure 2.4 Example LLM workflow
-- Listing 2.2 TODO
+- Listing 2.2 Search workflow
 
+### 2.2.3 Avoiding common prompt pitfalls
+- Table 2.3 Common pitfalls
+
+## 2.3 Building an agent with OpenAI Agents
+### Building a minimal agent
